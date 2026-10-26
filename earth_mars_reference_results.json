@@ -1,0 +1,248 @@
+{
+  "document": "Draft study for Cybertwip; proposed addressees SpaceX and NASA; no US Navy authorship or endorsement claimed",
+  "constants_units": "distances km; speeds km/s unless field says m/s; SI rocket equation; TDB boundary epochs",
+  "constants": {
+    "au_km": 149597870.7,
+    "mu_sun_km3_s2": 132712440041.27942,
+    "mu_earth_km3_s2": 398600.435507,
+    "mu_mars_system_km3_s2_point_mass_approximation": 42828.375816,
+    "earth_equatorial_radius_km": 6378.1366,
+    "mars_equatorial_radius_km": 3396.19,
+    "g0_m_s2": 9.80665
+  },
+  "analytic_reference": {
+    "model": "Ideal circular coplanar Hohmann; no departure date; point-mass patched conics",
+    "earth_orbit_radius_au": 1.0,
+    "mars_orbit_radius_au": 1.52371034,
+    "transfer_semimajor_axis_au": 1.26185517,
+    "time_of_flight_days": 258.87058094937845,
+    "earth_period_days": 365.25689832723634,
+    "mars_period_days": 686.9925840090687,
+    "synodic_period_days": 779.9221273113974,
+    "mars_lead_angle_at_departure_deg": 44.34582947325377,
+    "earth_departure_heliocentric_velocity_km_s": [
+      0,
+      29.784691834309108,
+      0
+    ],
+    "transfer_departure_heliocentric_velocity_km_s": [
+      0,
+      32.72951446522587,
+      0
+    ],
+    "mars_arrival_heliocentric_speed_km_s": 24.129143358226834,
+    "transfer_arrival_heliocentric_speed_km_s": 21.48014199682196,
+    "earth_escape_from_200km": {
+      "v_infinity_km_s": 2.944822630916761,
+      "c3_km2_s2": 8.671980327559513,
+      "periapsis_radius_km": 6578.1366,
+      "eccentricity": 1.143114422628867,
+      "v_periapsis_km_s": 11.395676711974728,
+      "v_circular_km_s": 7.784261923788396,
+      "asymptote_true_anomaly_deg": 151.02167694215794,
+      "total_deflection_deg": 122.04335388431586,
+      "impact_parameter_km": 25455.630934713336
+    },
+    "tmi_delta_v_km_s": 3.611414788186332,
+    "departure_periapsis_polar_angle_deg_in_arbitrary_plane": -61.02167694215794,
+    "departure_tangential_burn_polar_angle_deg_in_arbitrary_plane": 28.97832305784206,
+    "mars_capture_to_250km": {
+      "v_infinity_km_s": 2.649001361404874,
+      "c3_km2_s2": 7.017208212724877,
+      "periapsis_radius_km": 3646.19,
+      "eccentricity": 1.5974094026604848,
+      "v_periapsis_km_s": 5.523525442727978,
+      "v_circular_km_s": 3.42725291623907,
+      "asymptote_true_anomaly_deg": 128.756621229799,
+      "total_deflection_deg": 77.51324245959802,
+      "impact_parameter_km": 7602.798370529848
+    },
+    "mars_circular_capture_delta_v_km_s": 2.096272526488908,
+    "entry_reference": {
+      "altitude_km": 125,
+      "inertial_speed_km_s": 5.598507727940178,
+      "assumed_inertial_flight_path_angle_deg": -12,
+      "vacuum_impact_parameter_km": 7279.205067162547,
+      "vacuum_periapsis_altitude_km": -0.18179586883888987
+    },
+    "terminal_braking_reference": {
+      "gravity_m_s2": 3.7131940611279752,
+      "initial_down_speed_m_s": 100.0,
+      "net_up_acceleration_m_s2": 5.0,
+      "isp_s_assumed": 330.0,
+      "ideal_time_s": 20.0,
+      "ideal_height_m": 1000.0,
+      "propulsive_delta_v_m_s": 174.26388122255952,
+      "retained_touchdown_mass_kg_assumed": 200000.0,
+      "mass_at_ignition_kg": 211064.91960536578,
+      "propellant_burned_kg": 11064.91960536578,
+      "initial_thrust_N": 1839049.6040179266,
+      "final_thrust_N": 1742638.8122255951
+    },
+    "direct_entry_ideal_mass_ledger": {
+      "architecture": "TMI + assumed 100 m/s TCM + unvalidated aerodynamic deceleration + ideal terminal example",
+      "vacuum_isp_s_assumed": 380,
+      "terminal_isp_s_assumed": 330.0,
+      "tmi_initial_mass_kg": 571411.9795271916,
+      "tmi_propellant_kg": 354606.5313557093,
+      "tcm_initial_mass_kg": 216805.44817148228,
+      "tcm_propellant_kg": 5740.528566116496,
+      "terminal_initial_mass_kg": 211064.91960536578,
+      "terminal_propellant_kg": 11064.91960536578,
+      "touchdown_retained_mass_kg": 200000.0,
+      "total_propellant_kg": 371411.9795271916,
+      "hypothetical_oxidizer_to_fuel_mass_ratio": 3.6,
+      "methane_kg_if_assumed_ratio": 80741.73467982427,
+      "oxygen_kg_if_assumed_ratio": 290670.24484736734,
+      "exclusions": [
+        "Earth ascent",
+        "refueling transfer losses",
+        "boiloff",
+        "finite-burn losses",
+        "reserve policy",
+        "hover/divert",
+        "engine startup/shutdown",
+        "aerothermal feasibility",
+        "entry thrust",
+        "plane changes",
+        "surface stay",
+        "return mission"
+      ]
+    }
+  },
+  "horizons_epoch_case": {
+    "model": "JPL geometric boundary states; zero-revolution Sun-only Lambert and patched-conic reference; not optimized",
+    "departure_tdb": "A.D. 2026-Nov-20 00:00:00.0000",
+    "arrival_tdb": "A.D. 2027-Jul-18 00:00:00.0000",
+    "frame": "ICRF axes, Sun origin, geometric vectors, km and km/s",
+    "time_of_flight_days": 240.0,
+    "earth_at_departure": {
+      "jd_tdb": 2461364.5,
+      "calendar_tdb": "A.D. 2026-Nov-20 00:00:00.0000",
+      "r_km": [
+        79870925.95069732,
+        114139015.6308791,
+        49476151.03406017
+      ],
+      "v_km_s": [
+        -25.55046943839161,
+        14.65271823662811,
+        6.350819554745302
+      ]
+    },
+    "mars_at_arrival": {
+      "jd_tdb": 2461604.5,
+      "calendar_tdb": "A.D. 2027-Jul-18 00:00:00.0000",
+      "r_km": [
+        -188331768.7566448,
+        -132117477.1445661,
+        -55521024.35451608
+      ],
+      "v_km_s": [
+        15.5774969536821,
+        -15.49229809774744,
+        -7.52611045471134
+      ]
+    },
+    "spacecraft_departure_v_km_s": [
+      -27.05052091519229,
+      17.431252755483644,
+      8.271636615101512
+    ],
+    "spacecraft_arrival_v_km_s": [
+      12.08115525970371,
+      -15.311481396672626,
+      -7.052770901533534
+    ],
+    "earth_departure_v_infinity_km_s": [
+      -1.5000514768006816,
+      2.778534518855535,
+      1.9208170603562102
+    ],
+    "mars_arrival_v_infinity_km_s": [
+      -3.4963416939783905,
+      0.1808167010748143,
+      0.47333955317780596
+    ],
+    "departure_asymptote_icrf": {
+      "right_ascension_deg": 118.36334374376875,
+      "declination_deg": 31.312835300502655
+    },
+    "arrival_velocity_asymptote_icrf": {
+      "right_ascension_deg": 177.03953062296355,
+      "declination_deg": 7.69974078775136
+    },
+    "transfer_inclination_to_icrf_equator_deg": 24.065771645991646,
+    "transfer_inclination_to_earth_osculating_orbit_deg": 1.134979711520885,
+    "departure_hyperbola": {
+      "v_infinity_km_s": 3.6959365098549974,
+      "c3_km2_s2": 13.65994668487914,
+      "periapsis_radius_km": 6578.1366,
+      "eccentricity": 1.2254312520445656,
+      "v_periapsis_km_s": 11.61246804435486,
+      "v_circular_km_s": 7.784261923788396,
+      "asymptote_true_anomaly_deg": 144.69025056151887,
+      "total_deflection_deg": 109.38050112303775,
+      "impact_parameter_km": 20668.212469347334
+    },
+    "arrival_hyperbola": {
+      "v_infinity_km_s": 3.53286714341791,
+      "c3_km2_s2": 12.481150253041823,
+      "periapsis_radius_km": 3646.19,
+      "eccentricity": 2.0625816266452315,
+      "v_periapsis_km_s": 5.997772532930892,
+      "v_circular_km_s": 3.42725291623907,
+      "asymptote_true_anomaly_deg": 119.00128901799116,
+      "total_deflection_deg": 58.002578035982324,
+      "impact_parameter_km": 6190.1615158643845
+    },
+    "tmi_from_200km_aligned_circle_km_s": 3.8282061205664633,
+    "capture_to_250km_aligned_circle_km_s": 2.5705196166918216,
+    "one_mathematical_escape_plane": {
+      "normal_icrf": [
+        0.0733388818452424,
+        -0.5400285577679617,
+        0.8384453263062207
+      ],
+      "periapsis_r_km": [
+        5642.385871539772,
+        -2596.8030035453753,
+        -2166.0971736479532
+      ],
+      "burn_direction_icrf": [
+        0.5088115188016828,
+        0.7433246685531362,
+        0.4342571536026724
+      ],
+      "burn_direction_angles": {
+        "right_ascension_deg": 55.60805625704483,
+        "declination_deg": 25.73803482589133
+      },
+      "inclination_to_icrf_equator_deg": 33.02368777885416,
+      "note": "Illustrative only; Earth orientation, launch site, parking orbit, eclipse and finite burns not solved"
+    },
+    "independent_rk4_endpoint_error_km": 4.045857355569968e-06,
+    "independent_rk4_velocity_error_km_s": 4.674553141704779e-13,
+    "earth_mars_distance_at_arrival_km": 252171731.7532772,
+    "instantaneous_range_over_c_seconds": 841.1543553683302,
+    "source_files": [
+      "horizons_399.json",
+      "horizons_499.json"
+    ],
+    "source_sha256": [
+      "7a9c062738d154df75e167ad79ece79dda6ac52980f2333546447f4e67cbf8dd",
+      "2908141646aadaaa7c7f7f26f7e51e91572c6324cb6458e9b549eb26e8e7d8ed"
+    ]
+  },
+  "verification": {
+    "passed": true,
+    "analytic_horizon_rk4_endpoint_error_km": 9.062325377235703e-06,
+    "checks": [
+      "units/ranges",
+      "positive propellant ledger",
+      "mass conservation",
+      "independent Cartesian integration of analytic transfer",
+      "independent Cartesian integration of epoch Lambert transfer"
+    ]
+  }
+}

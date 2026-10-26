@@ -1,0 +1,662 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Earth–Mars Mission Study — Cybertwip draft</title><style>
+:root{color-scheme:light;--ink:#172a3a;--line:#cdd9e2;--navy:#102d43}
+*{box-sizing:border-box}body{margin:0;color:var(--ink);background:#e9eef3;
+font:16px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}main{max-width:1120px;
+margin:28px auto;background:white;padding:48px 60px;box-shadow:0 8px 35px #102d4315}
+.eyebrow{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#486478}
+h1{font-size:34px;line-height:1.2;color:var(--navy);margin:16px 0 24px}h2{font-size:24px;
+line-height:1.3;color:var(--navy);margin:44px 0 18px;border-bottom:2px solid var(--line);padding-bottom:8px}
+h3{font-size:19px;margin-top:28px}p{margin:13px 0}a{color:#075d85}table{border-collapse:collapse;
+width:100%;font-size:13px;line-height:1.45;margin:22px 0;overflow-wrap:anywhere}th,td{padding:10px 12px;
+border:1px solid var(--line);vertical-align:top}th{background:#e9f1f6;text-align:left}tr:nth-child(even){background:#f8fafb}
+pre{font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:#f0f4f7;
+padding:18px;border-left:4px solid #628aa1;white-space:pre-wrap;overflow-wrap:anywhere}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.88em}
+figure{margin:26px 0;border:1px solid var(--line);padding:18px;break-inside:avoid}
+figure svg{width:100%;height:auto}figcaption{font-size:12px;color:#4a6577;margin-top:10px}
+.status{padding:14px 18px;border:1px solid #a5bdcc;background:#edf5f9;margin:20px 0}
+.missing{border-color:#cfa775;background:#fff6ea}details{background:#f2f6f9;padding:12px 18px}
+small,.manifest{font-size:11px;color:#536b7b}.manifest{overflow-wrap:anywhere}ol,ul{padding-left:25px}
+@media(max-width:760px){main{padding:24px 18px;margin:0}h1{font-size:27px}table{font-size:11px}
+th,td{padding:7px 6px}}@media print{body{background:white}main{padding:0;margin:0;box-shadow:none;
+max-width:none}details{display:none}h2{break-after:avoid}pre,table{font-size:10px}a{text-decoration:none}
+figure{break-inside:avoid}@page{size:A4;margin:17mm}}
+</style></head><body><main><div class="eyebrow">Engineering study / reproducible references / simulation evidence</div><details><summary>Document contents</summary><div class="toc">
+<ul>
+<li><a href="#earthmars-mission-mathematics-and-simulation-evidence">Earth–Mars Mission Mathematics and Simulation Evidence</a><ul>
+<li><a href="#1-deliverables-and-reproduction">1. Deliverables and reproduction</a></li>
+<li><a href="#2-data-required-before-selecting-a-mission">2. Data required before selecting a mission</a></li>
+<li><a href="#3-frames-units-time-and-the-moving-solar-system">3. Frames, units, time, and the moving Solar System</a></li>
+<li><a href="#4-a-force-model-hierarchy-that-can-be-validated">4. A force-model hierarchy that can be validated</a></li>
+<li><a href="#5-analytic-reference-circular-coplanar-hohmann-transfer">5. Analytic reference: circular, coplanar Hohmann transfer</a></li>
+<li><a href="#6-earth-departure-excess-velocity-parking-orbit-and-the-actual-burn-direction">6. Earth departure: excess velocity, parking orbit and the actual burn direction</a></li>
+<li><a href="#7-dated-3d-reference-from-preserved-nasajpl-vectors">7. Dated 3D reference from preserved NASA/JPL vectors</a></li>
+<li><a href="#8-propellant-accounting-reserves-and-finite-burns">8. Propellant accounting, reserves and finite burns</a></li>
+<li><a href="#9-mars-approach-capture-or-entry-and-b-plane-targeting">9. Mars approach, capture or entry, and B-plane targeting</a></li>
+<li><a href="#10-terminal-guidance-orientation-and-physical-touchdown">10. Terminal guidance, orientation and physical touchdown</a></li>
+<li><a href="#11-starship-public-data-profile-and-what-is-still-unknown">11. Starship public-data profile and what is still unknown</a></li>
+<li><a href="#12-complete-earthmars-application-run-and-telemetry-contract">12. Complete Earth–Mars application run and telemetry contract</a></li>
+<li><a href="#13-turning-the-study-into-a-vehicle-specific-mission-design">13. Turning the study into a vehicle-specific mission design</a></li>
+<li><a href="#14-primary-references-and-scope-of-evidence">14. Primary references and scope of evidence</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</details><h1 id="earthmars-mission-mathematics-and-simulation-evidence">Earth–Mars Mission Mathematics and Simulation Evidence</h1>
+<p><strong>Prepared for:</strong> Cybertwip<br />
+<strong>Proposed addressees:</strong> SpaceX mission design teams and NASA exploration/navigation teams<br />
+<strong>Status:</strong> Independent engineering study draft, 26 October 2026<br />
+<strong>Attribution:</strong> US Navy coauthorship, authorization, and endorsement have not been established and are not claimed. This document has not been submitted to the proposed addressees.</p>
+<p>To the engineering teams at SpaceX and NASA:</p>
+<p>This study sets out a reproducible route from Earth departure conditions to a Mars arrival and a physically constrained landing model. It supplies the equations, data contracts, calculated reference cases, and simulation evidence needed to examine such a route. It keeps three different things explicit: an analytic comparison, a dated trajectory computed from NASA/JPL observations-based ephemerides, and a separately identified application-run evidence section for the experimental EX-1 vehicle.</p>
+<p>A trajectory that reaches Mars is only part of a landing design. An operational solution also needs the actual vehicle's aerodynamic and propulsion models, landing-site terrain, atmospheric dispersions, navigation covariance, and verified flight constraints. There is no epoch-independent angle or fuel quantity that lands every Starship configuration. All numbers below identify their frame, units, epoch, architecture, and assumptions.</p>
+<h2 id="1-deliverables-and-reproduction">1. Deliverables and reproduction</h2>
+<p>The numerical companion is <a href="earth_mars_reference.py">earth_mars_reference.py</a>. The complete precision output is <a href="earth_mars_reference_results.json">earth_mars_reference_results.json</a>. Exact JPL response files and their provenance are in <a href="earth_mars_data/">earth_mars_data</a>. The printable HTML and PDF are generated from this Markdown source and the telemetry attachments; they do not depend on a remote mathematics renderer.</p>
+<pre><code class="language-sh"># Offline: use the preserved JPL responses; reproduce both worked examples.
+python3 Sandbox/Space/reports/earth_mars_reference.py
+
+# Optional explicit refresh: retrieve two small, read-only JPL vector tables.
+python3 Sandbox/Space/reports/earth_mars_reference.py --fetch-horizons
+
+# Render the report; add the complete application run when available.
+python3 Sandbox/Space/reports/render_earth_mars_study.py \
+  --telemetry Sandbox/Space/reports/telemetry/earth_mars_run.json \
+  --telemetry-csv Sandbox/Space/reports/telemetry/earth_mars_run.csv
+</code></pre>
+<p>The calculator uses Python's standard library. The renderer uses Python-Markdown and ReportLab; its output manifest records their installed versions and all input hashes. All telemetry rows stay in the attached JSON and CSV rather than being reduced to selected points in the document. Document plots may downsample the displayed line; the original attached records are retained.</p>
+<h2 id="2-data-required-before-selecting-a-mission">2. Data required before selecting a mission</h2>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Required inputs</th>
+<th>Why they matter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Time and geometry</td>
+<td>Departure/arrival epochs, time scale, ephemeris version, reference axes and origin</td>
+<td>The same numerical coordinates mean different things in different frames or at different epochs.</td>
+</tr>
+<tr>
+<td>Earth departure</td>
+<td>Launch site, Earth orientation, launch azimuth constraints, parking orbit, vehicle state and covariance</td>
+<td>A heliocentric transfer direction does not specify a surface launch bearing.</td>
+</tr>
+<tr>
+<td>Vehicle</td>
+<td>Dry/payload/propellant masses, center of mass and inertia, tank geometry, usable residuals, thrust and Isp maps, throttle limits, engine-out rules</td>
+<td>Mass, burn duration, attitude authority, and fuel reserve depend on the selected configuration.</td>
+</tr>
+<tr>
+<td>Cruise</td>
+<td>Power/thermal pointing, communications, radiation environment, navigation measurements, correction allocation, boiloff and transfer losses</td>
+<td>A passive two-body coast does not model all operational constraints.</td>
+</tr>
+<tr>
+<td>Mars arrival</td>
+<td>Target B-plane, entry interface, landing site and season, atmosphere/wind distributions, gravity field, terrain and hazards</td>
+<td>Entry state must fall inside a vehicle-specific corridor and reachable terrain region.</td>
+</tr>
+<tr>
+<td>Entry/descent</td>
+<td>Aerodynamic coefficient tables, TPS response, plume interaction, control surfaces, sensor performance, propulsion transients</td>
+<td>Neither a generic drag coefficient nor a fixed landing angle can establish landing feasibility.</td>
+</tr>
+<tr>
+<td>Acceptance</td>
+<td>Dispersions, probability requirements, reserve policy, structural/thermal limits, navigation and guidance tolerances</td>
+<td>A nominal trajectory passing through a point is insufficient evidence.</td>
+</tr>
+</tbody>
+</table>
+<p>NASA's Mars-GRAM 2024 estimates atmospheric mean conditions and statistical variations. It supplies an engineering environment, not one universal atmosphere for every place and time. A mission should preserve the exact configuration, input data, and random seeds used for its dispersion study. <a href="https://ntrs.nasa.gov/citations/20240012934">NASA Mars-GRAM 2024 user guide</a>.</p>
+<h2 id="3-frames-units-time-and-the-moving-solar-system">3. Frames, units, time, and the moving Solar System</h2>
+<p>Use SI units for dynamics and mass accounting, or an explicitly consistent kilometre-second unit system for orbital calculations. Here the orbital calculator uses km, km/s and km³/s², then explicitly converts delta-v to m/s for the rocket equation. Angles are radians inside algorithms and degrees in tables. A tonne is 1,000 kg. Conventional standard acceleration is <code>g0 = 9.80665 m/s²</code>; it is not local Mars gravity.</p>
+<p>The dated example uses geometric states in ICRF axes, with the Sun as origin, and TDB epochs. Earth is target 399 and Mars is target 499; these are body centers rather than Earth–Moon or Mars-system barycenter target IDs. Horizons requests explicitly select <code>VECTORS</code>, <code>REF_SYSTEM=ICRF</code>, <code>REF_PLANE=FRAME</code>, <code>CENTER=500@10</code>, <code>VEC_CORR=NONE</code>, <code>OUT_UNITS=KM-S</code>, and <code>TIME_TYPE=TDB</code>. Exact requests and response hashes accompany the data. <a href="https://ssd-api.jpl.nasa.gov/doc/horizons.html">JPL Horizons API documentation</a>.</p>
+<p>Use geometric simultaneous states for force integration and targeting. A sky display may instead need light-time and stellar-aberration corrections; those observed directions cannot be substituted as simultaneous force-model positions. In SPICE, <code>spkezr</code> returns state vectors with an explicit frame, observer and aberration setting. <a href="https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkezr_c.html">NAIF state-vector interface</a>.</p>
+<p>Civil UTC, TT, TDB and UT1 serve different purposes. Convert UTC to the integration time scale using a versioned leap-second kernel and an appropriate time model; use Earth-orientation data for Earth-fixed transformations. The companion's date parser intentionally treats the supplied calendar labels as TDB and does not silently claim to convert UTC. <a href="https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/time.html">NAIF time subsystem</a>.</p>
+<p>For an inertial barycentric formulation, let <code>r_i</code> be each body's position and <code>mu_j = G m_j</code>:</p>
+<pre><code class="language-text">dr_i/dt = v_i
+dv_i/dt = sum_(j != i) mu_j (r_j - r_i) / |r_j - r_i|^3 + a_non_gravitational
+</code></pre>
+<p>The Sun responds to other bodies; it need not be fixed at an artificial origin. A common velocity added to every object changes inertial positions but preserves relative velocities and Newtonian encounters. In particular, a large Galactic translation must not be included in an Earth departure's <code>v_infinity</code> or the ship's heliocentric attitude heading.</p>
+<p>In a Sun-centered accelerating frame, third-body accelerations need the indirect term:</p>
+<pre><code class="language-text">a_third_body,j = mu_j [ (r_j-r_sc)/|r_j-r_sc|^3 - r_j/|r_j|^3 ]
+</code></pre>
+<p>An external Galactic potential mainly supplies common Solar System acceleration on an interplanetary mission. Its differential tidal field is the relevant relative effect. A Galaxy viewer's catalogue objects are not automatically a complete self-consistent mass model: missing stellar masses, gas and dark matter must not be silently replaced by equal-mass points. Do not double-count a star as both a resolved gravitating body and part of an unresolved smooth potential.</p>
+<p>For precise mission work, use versioned observationally fitted ephemerides rather than describing a Kepler approximation as a precision ephemeris. JPL's DE440/DE441 work combines numerical dynamics with fitted observations; differing time-span and modeling choices matter. <a href="https://ssd.jpl.nasa.gov/doc/de440_de441.html">JPL DE440/DE441 publication</a>.</p>
+<h2 id="4-a-force-model-hierarchy-that-can-be-validated">4. A force-model hierarchy that can be validated</h2>
+<p>The following is a mission-model specification, not a claim that every term is implemented by the application or the analytic companion.</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Baseline dynamics</th>
+<th>Refinements to assess and validate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Broad window search</td>
+<td>Sun-centered two-body Lambert transfers</td>
+<td>Multiple branches, departure/arrival constraints, launch energy, inclination and entry-state bounds</td>
+</tr>
+<tr>
+<td>Committed interplanetary trajectory</td>
+<td>Consistent planetary ephemerides, finite burns, navigation corrections</td>
+<td>Planet/Moon perturbations, solar radiation pressure, thermal recoil if material, relativistic terms at the required accuracy</td>
+</tr>
+<tr>
+<td>Earth departure / Mars orbit</td>
+<td>Body-centered numerical propagation</td>
+<td>Nonspherical gravity, rotation, third bodies, drag and eclipse geometry where relevant</td>
+</tr>
+<tr>
+<td>Entry/descent</td>
+<td>Six-degree-of-freedom vehicle and mass dynamics</td>
+<td>Atmospheric dispersions, gas chemistry/heating, aero tables, thrust/plume interaction, actuator and sensor dynamics</td>
+</tr>
+<tr>
+<td>Touchdown</td>
+<td>Terrain-relative motion and contact dynamics</td>
+<td>Landing gear compliance, friction, slopes, soil response, plume–surface interaction and stability</td>
+</tr>
+</tbody>
+</table>
+<p>For example, a solar test-particle first post-Newtonian correction in a suitable Sun-centered approximation is:</p>
+<pre><code class="language-text">a_1PN = mu_sun/(c² r³) [ (4 mu_sun/r - v²) r_vector
+                         + 4 (r_vector dot v_vector) v_vector ]
+</code></pre>
+<p>This compact term is not the complete relativistic N-body model. It must not be blindly added to an already supplied spacecraft ephemeris. The integration model, ephemeris definition and observable corrections must be consistent. An accuracy target and convergence/error budget are more useful than attaching a new model name without validation.</p>
+<p>Near an oblate body's polar axis frame, a common <code>J2</code> acceleration added to the central point-mass term is:</p>
+<pre><code class="language-text">K = 3 J2 mu R² / (2 r^5)
+a_J2 = K [ x(5z²/r²-1), y(5z²/r²-1), z(5z²/r²-3) ]
+</code></pre>
+<p>The gravity coefficients, normalization and body orientation must match the source model. Solar radiation pressure can start with a shadow-aware cannonball approximation, <code>a_SRP = P_1AU C_R (A/m) (1 AU/r)² s_hat</code>, where <code>s_hat</code> points away from the Sun. Coefficient, area, attitude and shadow assumptions should remain visible in metadata.</p>
+<p>Convergence must be demonstrated by step/tolerance reduction and independent propagation. Conservative-force validation includes energy and angular-momentum residuals; finite thrust and atmospheric flight require accounting for work, mass flow and dissipative terms rather than demanding spurious energy conservation. The study companion checks its Lambert solution with a separate Cartesian RK4 integration; agreement is a numerical consistency test, not real-flight validation.</p>
+<h2 id="5-analytic-reference-circular-coplanar-hohmann-transfer">5. Analytic reference: circular, coplanar Hohmann transfer</h2>
+<p>Assume a circular Earth orbit of <code>r_E = 1 AU</code>, a circular Mars orbit of <code>r_M = 1.52371034 AU</code>, and a Sun point mass. The Mars radius in this ideal comparison uses a nominal J2000 semimajor-axis value; eccentricity, actual orbital phases and inclination are deliberately omitted. The common transfer plane is an arbitrary ideal plane, not Earth's equator. The model is useful for dimensional checks and intuition. <a href="https://ssd.jpl.nasa.gov/planets/approx_pos.html">JPL approximate planetary elements</a>, <a href="https://science.nasa.gov/learn/basics-of-space-flight/chapter4-1/">NASA trajectory fundamentals</a>.</p>
+<pre><code class="language-text">a_T = (r_E + r_M)/2
+v_circular(r) = sqrt(mu_sun/r)
+v_transfer(r) = sqrt(mu_sun [2/r - 1/a_T])
+t_flight = pi sqrt(a_T³/mu_sun)
+n_E = sqrt(mu_sun/r_E³),  n_M = sqrt(mu_sun/r_M³)
+P_synodic = 2 pi / |n_E - n_M|
+Mars lead at departure = pi - n_M t_flight
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Calculated quantity</th>
+<th>Reference value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Transfer semimajor axis</td>
+<td>1.26185517 AU</td>
+</tr>
+<tr>
+<td>Time of flight</td>
+<td>258.870581 days</td>
+</tr>
+<tr>
+<td>Ideal synodic recurrence</td>
+<td>779.922127 days</td>
+</tr>
+<tr>
+<td>Mars ahead of Earth at departure, measured around the Sun</td>
+<td>44.345829°</td>
+</tr>
+<tr>
+<td>Earth's heliocentric speed</td>
+<td>29.784692 km/s</td>
+</tr>
+<tr>
+<td>Transfer speed at departure</td>
+<td>32.729514 km/s</td>
+</tr>
+<tr>
+<td>Outbound Earth excess speed</td>
+<td>2.944823 km/s</td>
+</tr>
+<tr>
+<td>Mars heliocentric speed at arrival</td>
+<td>24.129143 km/s</td>
+</tr>
+<tr>
+<td>Transfer speed at arrival</td>
+<td>21.480142 km/s</td>
+</tr>
+<tr>
+<td>Mars arrival excess speed magnitude</td>
+<td>2.649001 km/s</td>
+</tr>
+</tbody>
+</table>
+<p>The phase angle is a Sun-centered planet-to-planet angle at departure. It is not a rocket pitch angle, launch-site bearing or fixed latitude. The recurrence above is an ideal orbital-period calculation, not a schedule of approved launch opportunities.</p>
+<p>The constants used are <code>AU = 149597870.7 km</code>, <code>mu_sun = 1.32712440041279419e11 km³/s²</code>, <code>mu_Earth = 398600.435507 km³/s²</code>, and <code>mu_Mars-system = 42828.375816 km³/s²</code>. The reference approximates the Mars-system parameter as a central point mass; precision local Mars modeling must distinguish Mars from its moons. Reference spherical surface radii are Earth's equatorial <code>6378.1366 km</code> and Mars's equatorial <code>3396.19 km</code>. <a href="https://ssd.jpl.nasa.gov/astro_par.html">JPL astrodynamic parameters</a>, <a href="https://ssd.jpl.nasa.gov/planets/phys_par.html">JPL physical parameters</a>.</p>
+<h2 id="6-earth-departure-excess-velocity-parking-orbit-and-the-actual-burn-direction">6. Earth departure: excess velocity, parking orbit and the actual burn direction</h2>
+<p>The departure excess-velocity vector is the difference between the spacecraft's heliocentric transfer velocity and Earth's heliocentric velocity:</p>
+<pre><code class="language-text">v_inf,E = v_sc,departure - v_Earth,departure
+C3 = |v_inf,E|²
+r_p = R_Earth + parking_altitude
+v_p,hyp = sqrt(|v_inf,E|² + 2 mu_Earth/r_p)
+v_p,circ = sqrt(mu_Earth/r_p)
+Delta-v_TMI = v_p,hyp - v_p,circ             [aligned impulsive case]
+</code></pre>
+<p>For the ideal case from a 200 km circular orbit, <code>r_p = 6578.1366 km</code>, <code>C3 = 8.671980 km²/s²</code>, the circular speed is <code>7.784262 km/s</code>, hyperbolic periapsis speed is <code>11.395677 km/s</code>, and the aligned impulsive injection is <code>3.611415 km/s</code>. This excludes Earth ascent, finite-burn losses and plane mismatch.</p>
+<p>Hyperbola geometry determines the periapsis orientation relative to the outgoing asymptote:</p>
+<pre><code class="language-text">e_h = 1 + r_p |v_inf|²/mu_Earth
+nu_inf = acos(-1/e_h)
+total flyby deflection = 2 asin(1/e_h)
+b = r_p sqrt(1 + 2 mu_Earth/[r_p |v_inf|²])
+</code></pre>
+<p>Here <code>e_h = 1.143114</code>, <code>nu_inf = 151.021677°</code>, and the complete incoming-to-outgoing deflection would be <code>122.043354°</code>. These are different angles and must not be interchanged.</p>
+<p>For a reproducible arbitrary-plane construction, place Earth at heliocentric <code>(+r_E,0,0)</code>, moving along <code>+Y</code>, with prograde normal <code>+Z</code>. The ideal outgoing Earth excess velocity is also <code>+Y</code>. One departure periapsis radius points at <code>-61.021677°</code> from <code>+X</code>; the tangential injection direction points at <code>+28.978323°</code> from <code>+X</code>. The burn is locally horizontal/prograde in the assumed circular parking orbit. These two angles are illustrative coordinate components, not Earth-fixed launch commands.</p>
+<p>In the general 3D case, let <code>s_hat = unit(v_inf,E)</code> and select an admissible escape-plane normal <code>n_hat</code> with <code>n_hat dot s_hat = 0</code>. Construct:</p>
+<pre><code class="language-text">p_hat = rotate_about(n_hat, -nu_inf) s_hat
+q_hat = n_hat cross p_hat
+r_periapsis = r_p p_hat
+v_periapsis = v_p,hyp q_hat
+Delta-v_vector = v_periapsis - v_actual_parking_orbit
+</code></pre>
+<p>The launch location, parking orbit and timing constrain which <code>n_hat</code> is reachable. If inertial asymptote declination is <code>delta</code>, a necessary geometric condition is an orbit-plane inclination at least <code>|delta|</code>; launch latitude and operational azimuth restrictions add further constraints. An orbit plane and a departure asymptote do not determine a surface launch command by themselves.</p>
+<p>For a nonrotating spherical Earth and a directly reached prograde orbit, the familiar launch-bearing relation is <code>cos(i) = cos(latitude) sin(azimuth)</code>, with azimuth measured clockwise from north. Actual ascent targeting must include Earth's rotation, winds, finite thrust, flight-path shaping and range constraints. A plane change costs <code>2 v sin(Delta-i/2)</code> for equal-speed impulsive reorientation; combining speed and plane changes gives <code>sqrt(v1² + v2² - 2 v1 v2 cos(Delta-i))</code>.</p>
+<h2 id="7-dated-3d-reference-from-preserved-nasajpl-vectors">7. Dated 3D reference from preserved NASA/JPL vectors</h2>
+<p>This example selects two explicit TDB epochs to demonstrate the full calculation. It is not an optimized or recommended mission: departure is <strong>20 November 2026, 00:00:00 TDB</strong>, arrival is <strong>18 July 2027, 00:00:00 TDB</strong>, and time of flight is <strong>240 days</strong>. The state-vector snapshots preserve the exact JPL output used.</p>
+<p>Lambert's boundary-value problem is:</p>
+<pre><code class="language-text">Find v1 and v2 such that a trajectory under -mu_sun r/|r|³ has:
+r(t_departure) = r_Earth(t_departure)
+r(t_arrival)   = r_Mars(t_arrival)
+t_arrival - t_departure = selected flight time
+</code></pre>
+<p>The companion solves a zero-revolution universal-variable branch with the prograde sense selected relative to Earth's instantaneous orbital normal. It rejects unsupported collinear/singular cases. Operational window searches must compare all admissible branches and refine the selected finite-burn trajectory. A Lambert result is a seed for further targeting, not proof of landing feasibility. <a href="https://trajbrowser.arc.nasa.gov/user_guide.php">NASA trajectory survey method</a>, <a href="https://arxiv.org/abs/1403.2705">original Lambert algorithm research</a>.</p>
+<p>Using Stumpff functions <code>C(z)</code> and <code>S(z)</code>, one convenient formulation is:</p>
+<pre><code class="language-text">A = sin(Delta-theta) sqrt(r1 r2/[1-cos(Delta-theta)])
+y(z) = r1 + r2 + A [z S(z)-1]/sqrt(C(z))
+t(z) = { [y/C]^(3/2) S(z) + A sqrt(y) } / sqrt(mu_sun)
+Solve t(z) = selected time of flight
+f = 1-y/r1,  g = A sqrt(y/mu_sun),  g_dot = 1-y/r2
+v1 = (r2_vector - f r1_vector)/g
+v2 = (g_dot r2_vector - r1_vector)/g
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Dated-case result</th>
+<th>Value, in ICRF axes unless noted</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Departure excess velocity vector</td>
+<td>(-1.500051, +2.778535, +1.920817) km/s</td>
+</tr>
+<tr>
+<td>Departure excess speed</td>
+<td>3.695937 km/s</td>
+</tr>
+<tr>
+<td>Departure <code>C3</code></td>
+<td>13.659947 km²/s²</td>
+</tr>
+<tr>
+<td>Departure asymptote right ascension / declination</td>
+<td>118.363344° / +31.312835°</td>
+</tr>
+<tr>
+<td>Arrival excess velocity vector</td>
+<td>(-3.496342, +0.180817, +0.473340) km/s</td>
+</tr>
+<tr>
+<td>Arrival excess speed</td>
+<td>3.532867 km/s</td>
+</tr>
+<tr>
+<td>Arrival velocity-vector right ascension / declination</td>
+<td>177.039531° / +7.699741°</td>
+</tr>
+<tr>
+<td>Injection from an aligned 200 km circular Earth orbit</td>
+<td>3.828206 km/s</td>
+</tr>
+<tr>
+<td>Capture into an aligned 250 km circular Mars orbit</td>
+<td>2.570520 km/s</td>
+</tr>
+<tr>
+<td>One illustrative escape-plane inclination to the ICRF equator</td>
+<td>33.023688°</td>
+</tr>
+<tr>
+<td>Its unit injection direction</td>
+<td>(+0.508812, +0.743325, +0.434257)</td>
+</tr>
+<tr>
+<td>Its injection-direction right ascension / declination</td>
+<td>55.608056° / +25.738035°</td>
+</tr>
+<tr>
+<td>Mars–Earth instantaneous center distance at arrival</td>
+<td>252,171,731.753 km</td>
+</tr>
+<tr>
+<td>Instantaneous distance divided by light speed</td>
+<td>841.154 seconds, approximately 14.019 minutes</td>
+</tr>
+</tbody>
+</table>
+<p>The displayed arrival vector points along the planet-relative incoming velocity. An arrival radiant points in the opposite direction. The one-way light-time estimate above is instantaneous <code>range/c</code>; a precise link observable solves retarded transmission/reception geometry and adds the propagation corrections appropriate to the measurement.</p>
+<p>The complete heliocentric boundary states, transfer velocities, hyperbola parameters, escape-plane construction and independent endpoint residual are in the JSON companion. No out-of-plane component is projected away. An independent 1,800 s-step Cartesian RK4 propagation arrives within approximately <code>4.05e-6 km</code> of the Lambert endpoint for this case. That small mathematical residual does not represent actual trajectory uncertainty or landing accuracy.</p>
+<h2 id="8-propellant-accounting-reserves-and-finite-burns">8. Propellant accounting, reserves and finite burns</h2>
+<p>For a constant equivalent exhaust velocity, the ideal rocket equation is:</p>
+<pre><code class="language-text">v_e = g0 Isp
+Delta-v = v_e ln(m_before/m_after)
+m_before = m_after exp(Delta-v/v_e)
+m_propellant = m_before - m_after
+dm/dt = -T/(g0 Isp)
+</code></pre>
+<p>Propellant includes fuel and oxidizer. For oxidizer/fuel mass ratio <code>OF</code>, <code>m_fuel = m_propellant/(1+OF)</code> and <code>m_oxidizer = OF m_fuel</code>. An Isp value belongs to an operating condition and engine configuration, not to the Mars atmosphere or a universal vessel. <a href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/specific-impulse/">NASA Glenn specific impulse</a>, <a href="https://science.nasa.gov/learn/basics-of-space-flight/chapter3-2/">NASA rocket-equation discussion</a>.</p>
+<p>For sequential burns, work backward from the retained final mass. Each earlier burn must accelerate all propellant retained for later burns. Simply adding fuel estimates calculated with the same starting mass gives the wrong result. Include hardware jettison, transfers, leakage, unusable residuals and uncertainty explicitly between burn segments.</p>
+<p>The following is an <strong>ideal arithmetic ledger</strong>, not a Starship mission fuel budget. It uses the analytic Hohmann injection, assumes a 100 m/s correction allocation, assumes aerodynamic deceleration can deliver the terminal reference state in Section 10, assumes 380 s cruise Isp and 330 s terminal Isp, and retains 200,000 kg at touchdown. Those vehicle/performance values are user-adjustable study assumptions; no public SpaceX performance map was used to validate them.</p>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Mass before, kg</th>
+<th>Propellant consumed, kg</th>
+<th>Mass after, kg</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Earth orbital injection, 3,611.415 m/s at assumed 380 s</td>
+<td>571,411.980</td>
+<td>354,606.531</td>
+<td>216,805.448</td>
+</tr>
+<tr>
+<td>Assumed corrections, 100 m/s at assumed 380 s</td>
+<td>216,805.448</td>
+<td>5,740.529</td>
+<td>211,064.920</td>
+</tr>
+<tr>
+<td>Ideal final braking, 174.264 m/s at assumed 330 s</td>
+<td>211,064.920</td>
+<td>11,064.920</td>
+<td>200,000.000</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>571,411.980</td>
+<td>371,411.980</td>
+<td>200,000.000</td>
+</tr>
+</tbody>
+</table>
+<p>If one additionally assumes <code>OF = 3.6</code>, the ledger's total consists of about <code>80,741.735 kg</code> fuel and <code>290,670.245 kg</code> oxidizer. This mixture ratio is an illustrative input, not a certified Raptor value. The ledger excludes Earth ascent, orbital refilling losses, boiloff, finite-burn losses, reserve policy, hover/divert, plane changes, entry thrust, surface stay and Earth return. The unvalidated aerodynamic step is particularly consequential.</p>
+<p>A propulsive-capture architecture must additionally budget capture, deorbit and the changed entry state; the 250 km circular capture cost cannot be silently omitted or simultaneously credited as free atmospheric braking. Conversely, direct entry does not require paying a circularization burn first. These are alternative mission architectures, not interchangeable labels for the same burn sequence.</p>
+<p>For a finite burn, integrate <code>T(t)</code>, <code>Isp(t)</code>, mass, position and orientation. A simple <code>burn_time = m_propellant g0 Isp/T</code> is valid only for constant thrust/Isp and the specified consumed mass. Long Earth-periapsis burns cannot generally be replaced by one instantaneous impulse without assessing losses, arc splitting and retargeting. Capacity alone does not establish delivered delta-v.</p>
+<h2 id="9-mars-approach-capture-or-entry-and-b-plane-targeting">9. Mars approach, capture or entry, and B-plane targeting</h2>
+<p>For the analytic excess speed of <code>2.649001 km/s</code>, a point-mass 250 km Mars capture has incoming periapsis speed <code>5.523525 km/s</code> and circular speed <code>3.427253 km/s</code>, yielding an aligned impulsive capture cost of <code>2.096273 km/s</code>. The dated example has different values because its boundary geometry is different.</p>
+<p>For an arbitrary target ellipse with periapsis <code>r_p</code> and apoapsis <code>r_a</code>:</p>
+<pre><code class="language-text">a_target = (r_p+r_a)/2
+v_target,p = sqrt(mu_Mars [2/r_p - 1/a_target])
+Delta-v_capture = |v_incoming,p_vector - v_target,p_vector|
+</code></pre>
+<p>Capture must be targeted at the correct position and orientation, not just the correct radius. In a B-plane construction, choose the incoming asymptote convention explicitly. For example, use <code>S_hat = unit(v_inf,in)</code>, pick a nonparallel reference axis, define <code>T_hat = unit(reference cross S_hat)</code>, and <code>R_hat = S_hat cross T_hat</code>. The B-plane coordinates <code>B_T</code> and <code>B_R</code> specify the transverse offset. Different software packages use different signs/reference axes; exchange the basis vectors alongside the numbers.</p>
+<p>In an unpowered point-mass hyperbola, impact parameter magnitude and periapsis are related by:</p>
+<pre><code class="language-text">b = (mu_Mars/v_inf²) sqrt(e_h²-1)
+e_h = 1 + r_p v_inf²/mu_Mars
+</code></pre>
+<p>At a selected atmospheric interface radius <code>r_EI</code>, define inertial flight-path angle by <code>gamma = asin(r_hat dot v_hat)</code>; descending is negative. Before appreciable drag:</p>
+<pre><code class="language-text">v_EI = sqrt(v_inf² + 2 mu_Mars/r_EI)
+h_specific = r_EI v_EI cos(gamma)
+b = h_specific/v_inf
+</code></pre>
+<p>For the analytic case at 125 km altitude, <code>v_EI = 5.598508 km/s</code>. Selecting an illustrative inertial <code>gamma = -12°</code> gives <code>b = 7279.205 km</code> and a vacuum periapsis approximately <code>0.182 km</code> below the selected reference sphere. Atmospheric forces substantially alter the subsequent path. This does not establish a safe corridor: changing gamma can trade skipping, heat load, load factor, range and propellant in ways that depend on the actual vehicle.</p>
+<p>For atmospheric calculations, use velocity relative to the rotating atmosphere and wind:</p>
+<pre><code class="language-text">v_air = v_inertial - omega_Mars cross r - v_wind
+q_dynamic = rho |v_air|²/2
+D = q_dynamic C_D A,  L = q_dynamic C_L A
+ballistic_coefficient = m/(C_D A)
+</code></pre>
+<p>Body attitude, angle of attack, sideslip and bank determine aerodynamic force/moment directions. A hypersonic heating correlation may have the form <code>q_dot = k sqrt(rho/R_n) |v_air|³</code>, but its coefficient and regime must be appropriate to the gas, shape and chemistry. It is not a substitute for aerothermal/TPS analysis. Current NASA high-mass Mars work examines interactions between supersonic flow, engine plumes and vehicle geometry; low-mass rover hardware should not be scaled by mass alone. <a href="https://ntrs.nasa.gov/citations/20240007603">NASA powered-descent wind-tunnel study</a>, <a href="https://www.nasa.gov/wp-content/uploads/2024/07/civil-space-shortfall-descriptions-july-2024.pdf">NASA high-mass EDL shortfalls</a>.</p>
+<h2 id="10-terminal-guidance-orientation-and-physical-touchdown">10. Terminal guidance, orientation and physical touchdown</h2>
+<p>The local landing-frame dynamics must retain thrust direction, local gravity, drag, mass flow and attitude dynamics. For a body-to-inertial orientation <code>R(q)</code> and body-axis thrust <code>T_body</code>:</p>
+<pre><code class="language-text">r_dot = v
+v_dot = gravity + R(q) T_body/m + aerodynamic_force/m
+m_dot = -|T_body|/(g0 Isp)
+I omega_dot + omega cross (I omega) = commanded_torque + external_torque
+q_dot = quaternion_kinematics(q, omega)
+</code></pre>
+<p>A spacecraft in cruise does not have a universal correct nose direction: thermal, power and communications requirements can set attitude. If the visualization labels an attitude as <strong>prograde</strong>, use the velocity relative to the selected central body, not its absolute Galactic velocity. A departure burn should show its actual thrust direction; braking usually points thrust against the relevant planet-relative motion, while final hover aligns thrust approximately against local gravity.</p>
+<p>For the current model's nose axis <code>a_hat = +Y</code>, a shortest-arc display quaternion that aligns it to a requested unit direction <code>d_hat</code> can be constructed as <code>q = normalize([a_hat cross d_hat, 1 + a_hat dot d_hat])</code>, using vector-first/scalar-last notation. The antiparallel case requires an explicit perpendicular rotation axis; roll requires a secondary reference and continuity handling. Quaternion interpolation should avoid sign flips between equivalent <code>q</code> and <code>-q</code>. This display construction is separate from integrating physical attitude/actuator limits.</p>
+<p>For a simple drag-free vertical braking comparison, assume downward speed <code>v_down = 100 m/s</code>, constant local gravity <code>g = 3.713194 m/s²</code>, and a constant commanded net upward acceleration of <code>a_net = 5 m/s²</code>:</p>
+<pre><code class="language-text">t_brake = v_down/a_net = 20 s
+h_brake = v_down²/(2 a_net) = 1000 m
+T(t) = m(t) [g + a_net]
+Delta-v_propulsive = (g+a_net) t_brake = 174.263881 m/s
+m_ignition = m_touchdown exp(Delta-v_propulsive/[g0 Isp])
+</code></pre>
+<p>At an assumed <code>Isp = 330 s</code> and retained touchdown mass of <code>200,000 kg</code>, this model requires <code>211,064.920 kg</code> at ignition and consumes <code>11,064.920 kg</code> propellant. To keep the net acceleration constant as mass falls, thrust decreases from <code>1.839050 MN</code> to <code>1.742639 MN</code>. Holding thrust constant would produce a different trajectory. The 1,000 m ideal braking height contains no ignition delay, terrain, sensor, guidance, throttle or reserve margin and is not a commanded ignition altitude.</p>
+<p>A reachable landing design must satisfy available thrust, throttle floor, gimbal/attitude bounds, propellant and control authority throughout the trajectory. A necessary vertical deceleration condition is <code>T_vertical/m &gt; g</code> while reducing downward velocity; tilting diverts thrust from vertical support. Include horizontal divert, wind rejection, engine startup and terrain clearance in the reachable-set calculation rather than merely changing a visual pitch angle.</p>
+<p>Touchdown success requires measured support/contact, bounded vertical and lateral speeds, acceptable attitude/rates, and stable support over a dwell period. Landing gear can be modeled initially with compliant normal forces <code>F_n = max(0, k penetration - c v_normal)</code> and friction bounded by the contact normal load. The normal/contact sign convention must be consistent. A depleted tank or impact cannot be converted into a successful landing by assigning a final position. After a terminal event, contact processing should terminate or settle under a bounded workload; it should not run an enormous fast-forward catch-up loop during the touchdown frame.</p>
+<h2 id="11-starship-public-data-profile-and-what-is-still-unknown">11. Starship public-data profile and what is still unknown</h2>
+<p>The public-data profile is preserved separately in <a href="starship_public_profile.json">starship_public_profile.json</a>. These values are an attributed snapshot of the official design page, not a configuration-controlled vehicle interface document. SpaceX can revise them. The official page describes on-orbit refilling as part of the Mars architecture. <a href="https://www.spacex.com/vehicles/starship/design">SpaceX Starship design</a>, checked 26 October 2026.</p>
+<table>
+<thead>
+<tr>
+<th>Public item</th>
+<th>Attributed design-page value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Full system height / diameter</td>
+<td>124 m / 9 m</td>
+</tr>
+<tr>
+<td>Starship upper-stage height / diameter</td>
+<td>52 m / 9 m</td>
+</tr>
+<tr>
+<td>Upper-stage propellant capacity</td>
+<td>1,600 tonnes</td>
+</tr>
+<tr>
+<td>Upper-stage published aggregate thrust</td>
+<td>1,614 tonne-force</td>
+</tr>
+<tr>
+<td>Published payload capacity</td>
+<td>More than 100 tonnes</td>
+</tr>
+<tr>
+<td>Upper-stage engine arrangement</td>
+<td>Three Raptor and three Raptor Vacuum engines</td>
+</tr>
+<tr>
+<td>Super Heavy height / diameter</td>
+<td>72 m / 9 m</td>
+</tr>
+<tr>
+<td>Super Heavy propellant capacity</td>
+<td>3,650 tonnes</td>
+</tr>
+<tr>
+<td>Super Heavy published thrust / engine count</td>
+<td>8,240 tonne-force / 33 engines</td>
+</tr>
+<tr>
+<td>Propellant constituents</td>
+<td>Liquid methane and liquid oxygen</td>
+</tr>
+</tbody>
+</table>
+<p>The listed aggregate thrust is not a throttle/altitude-dependent engine map, nor proof that that thrust is usable in a particular Mars landing configuration. Converting tonne-force uses <code>1 tf = 9,806.65 N</code>. The profile intentionally leaves dry mass, usable landing reserve, vacuum/ambient Isp maps, mixture ratio, throttle floor, engine-restart envelope, thrust transients, aero/TPS coefficients, landing stability limits, and certified Mars entry/landing corridor <strong>unknown</strong> unless a configuration-specific primary source is supplied.</p>
+<p>The application's <strong>EX-1</strong> experimental transfer tug is a separate vehicle. Its configured 3,500 s transfer Isp is not a methane/oxygen Raptor specification. A complete EX-1 simulation demonstrates the application's modeled trajectory and event sequence only. It cannot validate Starship performance, predict real Starship tank sizes or serve as a universal Mars landing program. The analytic example's assumed 380/330 s Isp values also remain distinct from the public-data profile's unknown performance maps.</p>
+<h2 id="12-complete-earthmars-application-run-and-telemetry-contract">12. Complete Earth–Mars application run and telemetry contract</h2>
+<p>The renderer ingests the deterministic complete run supplied by the application's telemetry exporter and appends an evidence section to HTML/PDF. It reports the actual vehicle identifier and profile, epoch, achieved phases, burns, mass/fuel changes, touchdown result and any absent required field. No placeholder values are substituted for missing telemetry.</p>
+<p>The expected attachments are <a href="telemetry/earth_mars_run.json">earth_mars_run.json</a> and <a href="telemetry/earth_mars_run.csv">earth_mars_run.csv</a>, with any separate event history. The document manifest hashes those exact files. The PDF includes representative plots/tables; the full resolution records remain in the attachments. Until the exporter has provided these files, the generated evidence section explicitly says that no full application run has been ingested and makes no completion claim.</p>
+<table>
+<thead>
+<tr>
+<th>Telemetry group</th>
+<th>Fields needed for useful reconstruction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Identity/provenance</td>
+<td>Run/ship/profile IDs, source revision, ephemeris and force model versions, deterministic seed, units, frame and time scale</td>
+</tr>
+<tr>
+<td>Time/events</td>
+<td>Simulated UTC, integration seconds, phase, event identity, event time, selected/achieved clock rate</td>
+</tr>
+<tr>
+<td>Translational state</td>
+<td>Heliocentric and/or barycentric position and velocity, target-relative state, local position and velocity</td>
+</tr>
+<tr>
+<td>Propulsion</td>
+<td>Total mass, propellant remaining, thrust, throttle, mass-flow/Isp configuration, burn impulse and jettison events</td>
+</tr>
+<tr>
+<td>Attitude</td>
+<td>Nose/thrust vector, quaternion convention, angular rates, commanded pointing mode</td>
+</tr>
+<tr>
+<td>Approach/contact</td>
+<td>Altitude definition/datum, vertical/lateral speed, target range, leg loads, contact dwell and success/failure reason</td>
+</tr>
+<tr>
+<td>Communications</td>
+<td>Range, geometric/retarded light time distinction, RF/optical frequency, powers, gains, losses, received power and link margin</td>
+</tr>
+<tr>
+<td>Error/performance</td>
+<td>Integration residuals/tolerances, navigation covariance, missed deadlines, frame-time percentiles, model exceptions</td>
+</tr>
+</tbody>
+</table>
+<p>For an RF link, a basic accounting relation is <code>P_r,dBW = P_t,dBW + G_t,dBi + G_r,dBi - FSPL_dB - L_other,dB</code>, with <code>FSPL = 20 log10(4 pi range/lambda)</code>. Received power alone is not a data-rate or availability guarantee: noise temperature/bandwidth, coding, pointing, occultation, plasma and hardware constraints are additional inputs. Propagation latency and a live image feed are different data products; a simulation view must not be described as live spacecraft camera data.</p>
+<p>For a first-order link-budget audit, distinguish carrier power, spectral noise density and the chosen data rate:</p>
+<pre><code class="language-text">lambda = c/frequency
+noise_density_W_per_Hz = k_B T_system
+(C/N0)_dBHz = carrier_dBW - 10 log10(k_B T_system)
+(Eb/N0)_dB = (C/N0)_dBHz - 10 log10(bit_rate_bits_per_s)
+margin_dB = available_EbN0 - required_EbN0 - implementation_margin
+first_order_one_way_Doppler_Hz = -frequency * range_rate/c
+vacuum_one_way_delay = range/c
+Shannon_upper_bound_bits_per_s = bandwidth * log2(1 + signal_to_noise_power_ratio)
+</code></pre>
+<p>The Doppler sign above makes receding positive range rate a negative frequency shift. A coherent two-way transponder needs its turnaround ratio and both light-time legs; it is not the same observable. Thermal noise uses absolute temperature in kelvin and Boltzmann's constant. Receiver noise figure, antenna efficiency/pointing, bandwidth, modulation/coding thresholds and ground-station conditions must be explicit. Shannon capacity is an ideal theoretical upper bound, not a usable guaranteed telemetry data rate. Consult versioned station/interface models rather than assuming every DSN antenna has the same gain or temperature. <a href="https://deepspace.jpl.nasa.gov/dsndocs/810-005/">JPL DSN telecommunications handbook</a>.</p>
+<p>At interplanetary latency, the final descent needs onboard state estimation and guidance; a terrestrial viewer cannot close the touchdown control loop as if it were a local joystick. Range, Doppler and angular observations constrain different components of navigation and are not interchangeable measurements. <a href="https://science.nasa.gov/learn/basics-of-space-flight/chapter13-1/">NASA navigation fundamentals</a>.</p>
+<p>The run should preserve the full sequence <code>READY -&gt; ASCENT -&gt; WAITING WINDOW -&gt; TRANSFER -&gt; CAPTURE ORBIT -&gt; BRAKING + DESCENT -&gt; LANDED</code>, or record the actual alternative/abort sequence. Automated reporting must read event records rather than infer successful landing from the final image. Every field needs a stable definition so a change in reference frame or phase cannot masquerade as a velocity impulse.</p>
+<p>An interactive Play/reset epoch and a deterministic reference-run epoch serve different purposes. Interactive initialization should capture the current time once for the whole shared simulation. A regression run should deliberately freeze its epoch and identify it in the exported metadata so results can be reproduced. Neither the TDB study example nor a deterministic telemetry fixture should be presented as live current-time observations.</p>
+<h2 id="13-turning-the-study-into-a-vehicle-specific-mission-design">13. Turning the study into a vehicle-specific mission design</h2>
+<ol>
+<li>Freeze vehicle configuration, payload, mass properties, available propellant after Earth-orbit refilling, reserves, and validated engine/aerodynamic models. Select launch/landing sites and terrain/atmospheric assumptions.</li>
+<li>Acquire versioned ephemerides, orientation kernels and time/Earth-orientation data; validate frame conversions and units with known geometric cases.</li>
+<li>Search departure/arrival grids with Lambert seeds. Retain admissible branches under launch-energy, flight-time, arrival-speed, plane, thermal, power, communications and reserve constraints.</li>
+<li>Design the Earth parking/escape geometry and finite burns. Produce state-vector targets and covariance requirements rather than reusing the analytic reference's coordinate angles as commands.</li>
+<li>Refine the trajectory in a consistent perturbed numerical model. Design navigation measurements and correction opportunities; propagate covariance and operational uncertainties.</li>
+<li>Select capture/direct-entry architecture and target B-plane/entry states. Optimize the entry corridor, bank/angle-of-attack history, propulsion transition and reachable landing region with the actual vehicle.</li>
+<li>Run atmosphere, navigation, mass, engine, aero, wind and terrain dispersions. Track joint constraints and probabilities; assess abort/divert options and required reserves.</li>
+<li>Verify six-degree-of-freedom guidance, sensors and actuators, software/hardware timing, plume/ground interactions and touchdown stability. Use appropriate independent simulation, test data and flight qualification processes.</li>
+<li>Export the complete trajectory, phases, state/attitude histories, mass/propellant ledger, covariance/dispersions, source versions and all failures for independent review. A successful nominal application run is one test artifact within this larger process.</li>
+</ol>
+<h2 id="14-primary-references-and-scope-of-evidence">14. Primary references and scope of evidence</h2>
+<table>
+<thead>
+<tr>
+<th>Reference</th>
+<th>Use in this study</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://ssd-api.jpl.nasa.gov/doc/horizons.html">NASA/JPL Horizons API</a></td>
+<td>Exact boundary-state query settings and reproducible response snapshots</td>
+</tr>
+<tr>
+<td><a href="https://ssd.jpl.nasa.gov/horizons/manual.html">JPL Horizons manual</a></td>
+<td>Object centers, reference frames, epochs and ephemeris interpretation</td>
+</tr>
+<tr>
+<td><a href="https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/cspice/spkezr_c.html">NAIF state vectors</a></td>
+<td>Distinguishing geometric states from corrected observed directions</td>
+</tr>
+<tr>
+<td><a href="https://naif.jpl.nasa.gov/pub/naif/toolkit_docs/C/req/time.html">NAIF time subsystem</a></td>
+<td>Time-scale definitions and conversion requirements</td>
+</tr>
+<tr>
+<td><a href="https://ssd.jpl.nasa.gov/astro_par.html">JPL astrodynamic parameters</a></td>
+<td>AU, day and gravitational parameters</td>
+</tr>
+<tr>
+<td><a href="https://ssd.jpl.nasa.gov/planets/phys_par.html">JPL planet physical parameters</a></td>
+<td>Reference equatorial radii</td>
+</tr>
+<tr>
+<td><a href="https://ssd.jpl.nasa.gov/planets/approx_pos.html">JPL approximate elements</a></td>
+<td>Nominal semimajor axis for the analytic comparison</td>
+</tr>
+<tr>
+<td><a href="https://ssd.jpl.nasa.gov/doc/de440_de441.html">JPL DE440/DE441 paper</a></td>
+<td>Observations-based precision ephemeris modeling</td>
+</tr>
+<tr>
+<td><a href="https://science.nasa.gov/learn/basics-of-space-flight/chapter4-1/">NASA trajectory fundamentals</a></td>
+<td>Transfer geometry context</td>
+</tr>
+<tr>
+<td><a href="https://trajbrowser.arc.nasa.gov/user_guide.php">NASA trajectory browser methodology</a></td>
+<td>Efficient Lambert survey seeds and their limitations</td>
+</tr>
+<tr>
+<td><a href="https://arxiv.org/abs/1403.2705">Izzo, Revisiting Lambert's Problem</a></td>
+<td>Primary algorithm research for robust Lambert families</td>
+</tr>
+<tr>
+<td><a href="https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/specific-impulse/">NASA Glenn specific impulse</a></td>
+<td>Propulsion definitions</td>
+</tr>
+<tr>
+<td><a href="https://science.nasa.gov/learn/basics-of-space-flight/chapter3-2/">NASA rocket equation</a></td>
+<td>Propellant and delta-v relation</td>
+</tr>
+<tr>
+<td><a href="https://ntrs.nasa.gov/citations/20240012934">NASA Mars-GRAM 2024</a></td>
+<td>Atmospheric environment/dispersions</td>
+</tr>
+<tr>
+<td><a href="https://ntrs.nasa.gov/citations/20240007603">NASA powered-descent experimental study</a></td>
+<td>Aero/plume/geometry interactions in high-mass descent research</td>
+</tr>
+<tr>
+<td><a href="https://www.nasa.gov/wp-content/uploads/2024/07/civil-space-shortfall-descriptions-july-2024.pdf">NASA high-mass EDL shortfalls, July 2024</a></td>
+<td>Need for high-mass-specific entry/descent validation</td>
+</tr>
+<tr>
+<td><a href="https://www.spacex.com/vehicles/starship/design">SpaceX Starship design</a></td>
+<td>Attributed public dimensions, capacities and architecture snapshot</td>
+</tr>
+<tr>
+<td><a href="https://deepspace.jpl.nasa.gov/dsndocs/810-005/">JPL DSN telecommunications handbook</a></td>
+<td>Versioned station, RF and navigation interface models</td>
+</tr>
+<tr>
+<td><a href="https://science.nasa.gov/learn/basics-of-space-flight/chapter13-1/">NASA navigation fundamentals</a></td>
+<td>Range, Doppler and angular measurement roles</td>
+</tr>
+</tbody>
+</table>
+<p>The worked values are calculations from the stated assumptions and retained source data. They are not figures attributed to a real NASA, SpaceX or US Navy flight plan. The public-data profile, mathematical study and experimental application run remain separate evidence categories throughout the attachments.</p><section id="application-evidence"><h2>15. Ingested application telemetry evidence</h2><div class="status missing">No complete application run has been ingested. The report currently contains mathematical reference cases only. The renderer can be rerun with the exported JSON and CSV.</div></section><h2>16. Artifact provenance manifest</h2><p>SHA-256 values identify the exact study inputs and telemetry attachments used for this export. Calculated references, public design data and measured simulation outputs have separate source files.</p><table><thead><tr><th>Input path</th><th>SHA-256</th></tr></thead><tbody><tr><td>earth_mars_mission_study.md</td><td>f6de4de458cbd890e2ae58892a56c4b81d83bb1093e2238d786b0cd32a8cbe36</td></tr><tr><td>render_earth_mars_study.py</td><td>cb7e1cfed92f35d55454b4ea80bb7e3dd53f8943c610b438747715d6b97dbef0</td></tr><tr><td>earth_mars_reference.py</td><td>61fe285c5f3134bb752868d14a9a3e9c4ad1bc33d57227e6136d83a102bf65f6</td></tr><tr><td>earth_mars_reference_results.json</td><td>3bf917d3207c2cd79ca42ddf4e956f738a1e80f2d0a667114b30dc9dcb53578b</td></tr><tr><td>starship_public_profile.json</td><td>261965ea90233a9a9078af9d0d5904d8873222b02e6cbd3d7c12305f58a708b7</td></tr><tr><td>earth_mars_data/horizons_399.json</td><td>7a9c062738d154df75e167ad79ece79dda6ac52980f2333546447f4e67cbf8dd</td></tr><tr><td>earth_mars_data/horizons_399.provenance.json</td><td>1266a4b54fbb9fe5135205653510ca6298bbb148e1da2fbb079f79ef124e8df7</td></tr><tr><td>earth_mars_data/horizons_499.json</td><td>2908141646aadaaa7c7f7f26f7e51e91572c6324cb6458e9b549eb26e8e7d8ed</td></tr><tr><td>earth_mars_data/horizons_499.provenance.json</td><td>12b080e0fcd20b690bee46fa6c68dd1e74e4162c5960311f2653959771aeb846</td></tr></tbody></table><p>Renderer packages: {&quot;Markdown&quot;:&quot;3.11.2&quot;,&quot;reportlab&quot;:&quot;5.1.0&quot;}.</p></main></body></html>

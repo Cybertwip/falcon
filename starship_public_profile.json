@@ -1,0 +1,54 @@
+{
+  "profile_id": "spacex-starship-public-design-2026-10-26",
+  "display_name": "SpaceX Starship: public design-page snapshot",
+  "classification": "attributed public design data, not a validated or configuration-controlled flight model",
+  "accessed_utc_date": "2026-10-26",
+  "source_url": "https://www.spacex.com/vehicles/starship/design",
+  "full_system": {
+    "height_m": 124,
+    "diameter_m": 9,
+    "payload_capacity_tonnes_lower_bound": 100
+  },
+  "upper_stage": {
+    "height_m": 52,
+    "diameter_m": 9,
+    "propellant_capacity_kg": 1600000,
+    "published_thrust_tonne_force": 1614,
+    "published_thrust_N_conversion": 15827933.1,
+    "raptor_engines": 3,
+    "raptor_vacuum_engines": 3
+  },
+  "super_heavy": {
+    "height_m": 72,
+    "diameter_m": 9,
+    "propellant_capacity_kg": 3650000,
+    "published_thrust_tonne_force": 8240,
+    "published_thrust_N_conversion": 80806796.0,
+    "engine_count": 33
+  },
+  "propellants": [
+    "liquid oxygen",
+    "liquid methane"
+  ],
+  "mission_architecture_public_statement": "on-orbit refilling before Mars departure",
+  "unknown_inputs": {
+    "dry_mass_kg": null,
+    "usable_propellant_by_mission_kg": null,
+    "specific_impulse_maps": null,
+    "oxidizer_fuel_mass_ratio": null,
+    "throttle_and_restart_envelope": null,
+    "finite_burn_and_startup_transients": null,
+    "mass_properties_and_inertia": null,
+    "aero_and_aerothermal_coefficients": null,
+    "tps_limits": null,
+    "mars_entry_corridor": null,
+    "terminal_reserves_and_contact_limits": null
+  },
+  "study_assumptions_not_public_vehicle_specs": {
+    "cruise_isp_s": 380,
+    "terminal_isp_s": 330,
+    "mixture_ratio": 3.6,
+    "retained_touchdown_mass_kg": 200000
+  },
+  "application_vehicle_note": "EX-1 uses a separate experimental profile, including 3500 s transfer Isp. EX-1 results do not validate Starship."
+}

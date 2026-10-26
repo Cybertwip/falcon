@@ -1,0 +1,35 @@
+{
+  "report_title": "Earth\u2013Mars Mission Mathematics and Simulation Evidence",
+  "authorship": "Independent draft prepared for Cybertwip; no US Navy, NASA or SpaceX endorsement claimed",
+  "python_packages": {
+    "Markdown": "3.11.2",
+    "reportlab": "5.1.0"
+  },
+  "telemetry": {
+    "ingested": false,
+    "path": "/Users/cybertwip/Projects/PowerEngineV3/PowerEngine/Sandbox/Space/reports/telemetry/earth_mars_run.json",
+    "csv_path": "/Users/cybertwip/Projects/PowerEngineV3/PowerEngine/Sandbox/Space/reports/telemetry/earth_mars_run.csv"
+  },
+  "input_sha256": {
+    "earth_mars_mission_study.md": "f6de4de458cbd890e2ae58892a56c4b81d83bb1093e2238d786b0cd32a8cbe36",
+    "render_earth_mars_study.py": "cb7e1cfed92f35d55454b4ea80bb7e3dd53f8943c610b438747715d6b97dbef0",
+    "earth_mars_reference.py": "61fe285c5f3134bb752868d14a9a3e9c4ad1bc33d57227e6136d83a102bf65f6",
+    "earth_mars_reference_results.json": "3bf917d3207c2cd79ca42ddf4e956f738a1e80f2d0a667114b30dc9dcb53578b",
+    "starship_public_profile.json": "261965ea90233a9a9078af9d0d5904d8873222b02e6cbd3d7c12305f58a708b7",
+    "earth_mars_data/horizons_399.json": "7a9c062738d154df75e167ad79ece79dda6ac52980f2333546447f4e67cbf8dd",
+    "earth_mars_data/horizons_399.provenance.json": "1266a4b54fbb9fe5135205653510ca6298bbb148e1da2fbb079f79ef124e8df7",
+    "earth_mars_data/horizons_499.json": "2908141646aadaaa7c7f7f26f7e51e91572c6324cb6458e9b549eb26e8e7d8ed",
+    "earth_mars_data/horizons_499.provenance.json": "12b080e0fcd20b690bee46fa6c68dd1e74e4162c5960311f2653959771aeb846"
+  },
+  "plots": [],
+  "outputs": {
+    "earth_mars_mission_study.html": {
+      "sha256": "6889af42906e5e488ceffff97b94c1200caa714350f6c30728523436ddf41388",
+      "bytes": 54373
+    },
+    "earth_mars_mission_study.pdf": {
+      "sha256": "1e3892988eed02498e9deec420e5de6ff346a3461a6b57c5b2d027f1aaecefb1",
+      "bytes": 155379
+    }
+  }
+}

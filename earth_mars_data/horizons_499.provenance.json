@@ -1,0 +1,27 @@
+{
+  "retrieved_utc": "2026-10-26T22:58:07.680091+00:00",
+  "url": "https://ssd.jpl.nasa.gov/api/horizons.api?format=json&COMMAND=%27499%27&OBJ_DATA=%27YES%27&MAKE_EPHEM=%27YES%27&EPHEM_TYPE=%27VECTORS%27&CENTER=%27500%4010%27&TLIST=%272461364.500000000000+2461604.500000000000%27&TLIST_TYPE=%27JD%27&TIME_TYPE=%27TDB%27&REF_SYSTEM=%27ICRF%27&REF_PLANE=%27FRAME%27&VEC_CORR=%27NONE%27&OUT_UNITS=%27KM-S%27&CSV_FORMAT=%27YES%27&VEC_TABLE=%272%27&TIME_DIGITS=%27FRACSEC%27",
+  "sha256": "2908141646aadaaa7c7f7f26f7e51e91572c6324cb6458e9b549eb26e8e7d8ed",
+  "parameters": {
+    "format": "json",
+    "COMMAND": "'499'",
+    "OBJ_DATA": "'YES'",
+    "MAKE_EPHEM": "'YES'",
+    "EPHEM_TYPE": "'VECTORS'",
+    "CENTER": "'500@10'",
+    "TLIST": "'2461364.500000000000 2461604.500000000000'",
+    "TLIST_TYPE": "'JD'",
+    "TIME_TYPE": "'TDB'",
+    "REF_SYSTEM": "'ICRF'",
+    "REF_PLANE": "'FRAME'",
+    "VEC_CORR": "'NONE'",
+    "OUT_UNITS": "'KM-S'",
+    "CSV_FORMAT": "'YES'",
+    "VEC_TABLE": "'2'",
+    "TIME_DIGITS": "'FRACSEC'"
+  },
+  "source_signature": {
+    "source": "NASA/JPL Horizons API",
+    "version": "1.2"
+  }
+}

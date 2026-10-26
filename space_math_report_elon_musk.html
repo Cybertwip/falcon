@@ -1,0 +1,1419 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Space Plugin Math Report</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 16mm 15mm 18mm 15mm;
+    }
+
+    :root {
+      --ink: #15202b;
+      --muted: #4e6275;
+      --rule: #c8d4de;
+      --panel: #f7fafc;
+      --accent: #123a52;
+      --accent-soft: #d9e8ef;
+      --paper: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 11.2pt;
+      line-height: 1.45;
+    }
+
+    body {
+      padding: 0;
+    }
+
+    main {
+      max-width: 190mm;
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    .cover {
+      min-height: 255mm;
+      padding: 12mm 6mm 10mm 6mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      background:
+        radial-gradient(circle at top right, rgba(18, 58, 82, 0.10), transparent 32%),
+        linear-gradient(180deg, rgba(217, 232, 239, 0.45), rgba(255, 255, 255, 0.0) 28%);
+    }
+
+    .eyebrow {
+      font-size: 9pt;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 18pt;
+    }
+
+    h1 {
+      margin: 0 0 10pt 0;
+      font-size: 28pt;
+      line-height: 1.06;
+      color: var(--accent);
+    }
+
+    .subtitle {
+      margin: 0 0 20pt 0;
+      font-size: 14pt;
+      line-height: 1.35;
+      color: var(--muted);
+      max-width: 150mm;
+    }
+
+    .cover-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14pt;
+      margin-top: 18pt;
+    }
+
+    .card {
+      border: 1px solid var(--rule);
+      border-radius: 10pt;
+      padding: 12pt 14pt;
+      background: rgba(255, 255, 255, 0.84);
+    }
+
+    .card h3 {
+      margin: 0 0 8pt 0;
+      font-size: 10pt;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    .card p {
+      margin: 0;
+    }
+
+    .cover-note {
+      margin-top: 20pt;
+      padding: 12pt 14pt;
+      background: var(--panel);
+      border-left: 4pt solid var(--accent);
+    }
+
+    h2 {
+      margin: 18pt 0 10pt 0;
+      padding-top: 4pt;
+      font-size: 17pt;
+      color: var(--accent);
+      border-top: 1px solid var(--rule);
+    }
+
+    h3 {
+      margin: 14pt 0 7pt 0;
+      font-size: 12.5pt;
+      color: #1d3446;
+    }
+
+    p {
+      margin: 7pt 0;
+    }
+
+    ul {
+      margin: 8pt 0 10pt 18pt;
+      padding: 0;
+    }
+
+    li {
+      margin: 4pt 0;
+    }
+
+    code {
+      font-family: Menlo, Monaco, Consolas, monospace;
+      font-size: 0.92em;
+      background: rgba(217, 232, 239, 0.40);
+      padding: 0.06em 0.28em;
+      border-radius: 4px;
+    }
+
+    .eq {
+      margin: 10pt 0;
+      padding: 8pt 10pt;
+      border-radius: 8pt;
+      background: var(--panel);
+      border: 1px solid #dfe7ec;
+      font-family: "Times New Roman", Georgia, serif;
+      font-size: 12pt;
+    }
+
+    .eq strong {
+      color: var(--accent);
+    }
+
+    .eq-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10pt;
+    }
+
+    .small {
+      font-size: 9.7pt;
+      color: var(--muted);
+    }
+
+    .source {
+      margin: 6pt 0 10pt 0;
+      font-size: 9.6pt;
+      color: var(--muted);
+    }
+
+    .note, .warning {
+      margin: 10pt 0;
+      padding: 8pt 11pt;
+      border-radius: 8pt;
+      background: #f8fbfd;
+      border: 1px solid var(--rule);
+    }
+
+    .warning {
+      background: #fbf7ef;
+      border-color: #d8c8a6;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10pt 0 14pt 0;
+      font-size: 10pt;
+    }
+
+    th, td {
+      border: 1px solid var(--rule);
+      padding: 6pt 7pt;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--accent-soft);
+      text-align: left;
+      color: #17364c;
+    }
+
+    .section-break {
+      page-break-before: always;
+    }
+
+    .footer-signoff {
+      margin-top: 20pt;
+      padding-top: 10pt;
+      border-top: 1px solid var(--rule);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="cover">
+      <div>
+        <div class="eyebrow">Mathematical Reconstruction Report</div>
+        <h1>Space Plugin and Scripted Falcon Guidance</h1>
+        <p class="subtitle">
+          A code-grounded explanation of the formulas, conversions, controllers, approximations,
+          and trajectory equations implemented in the PowerEngine Space sandbox.
+        </p>
+
+        <div class="cover-grid">
+          <div class="card">
+            <h3>To</h3>
+            <p>Elon Musk</p>
+          </div>
+          <div class="card">
+            <h3>From</h3>
+            <p>Lieutenant Lopez</p>
+          </div>
+          <div class="card">
+            <h3>Date</h3>
+            <p>5 April 2026</p>
+          </div>
+          <div class="card">
+            <h3>Primary Sources</h3>
+            <p><code>Sandbox/Space/plugins/space/*.go</code><br><code>Sandbox/Space/plugins/space/scripts/*.as</code><br><code>Sandbox/Space/Port/physics/*.py</code></p>
+          </div>
+        </div>
+
+        <div class="cover-note">
+          The scope of this report is the math that is actually implemented, not ideal textbook behavior.
+          Where the Space stack uses approximations, display-only curves, or kinematic shortcuts, those are
+          called out directly.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Profile Handling Note</h3>
+        <p>
+          The Falcon mission profile in <code>Sandbox/Space/profiles/falcon_Earth_to_Mars_1.tsv</code>
+          was scanned as a consistency witness for logged fields and phase behavior, but the profile itself is
+          intentionally not reproduced in this document.
+        </p>
+      </div>
+    </section>
+
+    <section>
+      <h2>1. Scope and Method</h2>
+      <p>
+        This report covers the mathematical surfaces in the Go plugin, the AngelScript control scripts, and the
+        mirrored Python reference helpers that the plugin explicitly cites. The analysis follows the implementation
+        path from raw orbital elements, through body-state construction, through the runtime N-body simulation,
+        and finally into the Falcon guidance logic, telemetry generation, and visualization math.
+      </p>
+      <p>
+        The most important implementation files are:
+      </p>
+      <ul>
+        <li><code>physics.go</code>: constants, vector algebra, orbital-period helper, HSV conversion, and the momentum integrator.</li>
+        <li><code>simulation.go</code>: pairwise Newtonian forces, Sun-only asteroid forcing, and simulation substepping.</li>
+        <li><code>solar_system.go</code>: J2000 element evaluation, Kepler solving, orbital state-vector construction, asteroid mass synthesis, and initial heliocentric states.</li>
+        <li><code>objects.go</code>: AU and km/s conversion into plugin units, body momentum initialization, and logarithmic visual scaling.</li>
+        <li><code>SolarSystem.as</code>: Falcon ascent, transfer planning, transfer interpolation, approach and landing control, telemetry derivation, camera math, and HUD formulas.</li>
+        <li><code>OrbitMath.as</code> and <code>SolarLighting.as</code>: compact geometry and visual-scaling helpers.</li>
+        <li><code>Port/physics/classical.py</code> and <code>Port/physics/integrator.py</code>: reference formulas mirrored by the plugin.</li>
+      </ul>
+      <div class="warning">
+        One governing principle shaped this analysis: several quantities with names like "burn," "capture," or
+        "intercept" are not fully dynamic rocket-propagation quantities. In more than one phase, the code computes
+        them for display, planning, or bookkeeping while the actual state advance is performed by a separate analytic
+        or kinematic path. That distinction is documented each time it occurs.
+      </div>
+    </section>
+
+    <section>
+      <h2>2. Units, Frames, and Coordinate Conventions</h2>
+      <p>
+        The Space stack mixes three distinct numerical frames. Understanding the conversion contract is the key to
+        reading every other formula correctly.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Quantity</th>
+            <th>Implemented Value</th>
+            <th>Meaning</th>
+            <th>Primary Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>AUInMeters</code></td>
+            <td><code>1.496e11</code></td>
+            <td>1 astronomical unit in meters</td>
+            <td>SI-to-orbit conversion</td>
+          </tr>
+          <tr>
+            <td><code>GameUnitsPerAU</code></td>
+            <td><code>1000.0</code></td>
+            <td>Plugin orbit-space scale</td>
+            <td>Heliocentric body simulation</td>
+          </tr>
+          <tr>
+            <td><code>BaseDistance</code></td>
+            <td><code>GameUnitsPerAU / AUInMeters</code></td>
+            <td>Meters to orbit game-units</td>
+            <td>Velocity conversion and forces</td>
+          </tr>
+          <tr>
+            <td><code>UnitConversion</code></td>
+            <td><code>AUInMeters / GameUnitsPerAU</code></td>
+            <td>Orbit game-units to meters</td>
+            <td>Distance and force conversion</td>
+          </tr>
+          <tr>
+            <td><code>F9_METERS_PER_GU</code></td>
+            <td><code>5.0</code></td>
+            <td>Local launch/landing scale</td>
+            <td>Falcon local-frame ascent</td>
+          </tr>
+          <tr>
+            <td><code>ORBIT_GU_PER_METER</code></td>
+            <td><code>1000 / AUInMeters</code></td>
+            <td>Orbit-frame meters to game-units</td>
+            <td>World-frame Falcon guidance</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="eq-grid">
+        <div class="eq">
+          <strong>Base distance scale</strong><br>
+          BaseDistance = GameUnitsPerAU / AUInMeters
+        </div>
+        <div class="eq">
+          <strong>Inverse conversion</strong><br>
+          UnitConversion = AUInMeters / GameUnitsPerAU
+        </div>
+        <div class="eq">
+          <strong>Local Falcon conversion</strong><br>
+          F9_GU_PER_METER = 1 / F9_METERS_PER_GU
+        </div>
+        <div class="eq">
+          <strong>Orbit-frame metric conversion</strong><br>
+          ORBIT_GU_PER_METER = 1000 / AUInMeters
+        </div>
+      </div>
+
+      <p>
+        The Go plugin simulates heliocentric body positions directly in orbit game-units. The script then remaps the
+        returned axes for rendering so that the engine can use <code>XZ</code> as the horizontal plane and <code>Y</code>
+        as vertical.
+      </p>
+
+      <div class="eq">
+        <strong>Script-side coordinate remap</strong><br>
+        (x<sub>render</sub>, y<sub>render</sub>, z<sub>render</sub>) = (x<sub>plugin</sub>, z<sub>plugin</sub>, y<sub>plugin</sub>)
+      </div>
+
+      <p>
+        This is why some script formulas appear to use "Y" as height even though the Go layer stores heliocentric
+        vectors as ordinary XYZ tuples.
+      </p>
+    </section>
+
+    <section>
+      <h2>3. Fundamental Constants and Physical Parameters</h2>
+      <p>
+        The plugin math is classical and explicitly Newtonian. The physically active constants are the gravitational
+        constant <code>GReal</code>, the Solar standard gravitational parameter through <code>SunMassKg</code>, the Mars
+        gravitational parameter for Falcon world guidance, and the Falcon performance constants used in ascent and
+        landing calculations.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Symbol</th>
+            <th>Implementation</th>
+            <th>Interpretation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>G</td>
+            <td><code>6.67430e-11</code> m<sup>3</sup> kg<sup>-1</sup> s<sup>-2</sup></td>
+            <td>Newtonian gravitational constant</td>
+          </tr>
+          <tr>
+            <td>M<sub>sun</sub></td>
+            <td><code>1.989e30</code> kg</td>
+            <td>Used for heliocentric period and speed formulas</td>
+          </tr>
+          <tr>
+            <td>&mu;<sub>sun</sub></td>
+            <td><code>SUN_MU = 1.3271244e20</code> m<sup>3</sup>/s<sup>2</sup></td>
+            <td>Used in Falcon transfer and transfer HUD formulas</td>
+          </tr>
+          <tr>
+            <td>&mu;<sub>Mars</sub></td>
+            <td><code>MARS_MU = 4.282837e13</code> m<sup>3</sup>/s<sup>2</sup></td>
+            <td>Used in world-frame approach gravity compensation</td>
+          </tr>
+          <tr>
+            <td>g<sub>0</sub></td>
+            <td><code>9.80665</code> m/s<sup>2</sup></td>
+            <td>Used for Falcon thrust-to-mass and mass flow</td>
+          </tr>
+          <tr>
+            <td>T<sub>max</sub></td>
+            <td><code>7,607,000</code> N</td>
+            <td>Falcon maximum thrust</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="eq">
+        <strong>Screen-space gravitational parameters used by scripts</strong><br>
+        &mu;<sub>screen</sub> = &mu;<sub>SI</sub> * ORBIT_GU_PER_METER<sup>3</sup>
+      </div>
+
+      <p>
+        The scripts convert SI gravitational parameters into orbit-game-unit space by multiplying by the cube of the
+        orbit-frame meter scale. That is exactly what is required because gravitational acceleration has dimensions of
+        distance cubed divided by time squared over radius cubed.
+      </p>
+    </section>
+
+    <section class="section-break">
+      <h2>4. Solar-System State Construction from Orbital Elements</h2>
+      <p>
+        The Solar System bodies are seeded from J2000 Keplerian elements with linear drift rates per Julian century.
+        The plugin evaluates those elements at a fixed epoch near 2026-04-03 and then converts them into heliocentric
+        state vectors.
+      </p>
+      <p class="source">
+        Governing implementation: <code>Sandbox/Space/plugins/space/solar_system.go</code>
+      </p>
+
+      <h3>4.1 Element Evaluation at Epoch</h3>
+      <p>
+        For each body, the time-adjusted elements are evaluated as affine functions of the Julian-century parameter
+        <code>T</code>.
+      </p>
+      <div class="eq">
+        a = a<sub>0</sub> + a<sub>1</sub> T<br>
+        e = e<sub>0</sub> + e<sub>1</sub> T<br>
+        i = i<sub>0</sub> + i<sub>1</sub> T<br>
+        &Omega; = &Omega;<sub>0</sub> + &Omega;<sub>1</sub> T<br>
+        &varpi; = &varpi;<sub>0</sub> + &varpi;<sub>1</sub> T<br>
+        L = L<sub>0</sub> + L<sub>1</sub> T
+      </div>
+
+      <h3>4.2 Mean Anomaly and Argument of Perihelion</h3>
+      <div class="eq">
+        M = L - &varpi;<br>
+        &omega; = &varpi; - &Omega;
+      </div>
+
+      <p>
+        Each angle is then wrapped into the interval <code>[0, 360)</code> by the helper <code>mod360</code> before
+        converting to radians.
+      </p>
+
+      <h3>4.3 Kepler Equation Solver</h3>
+      <p>
+        The eccentric anomaly <code>E</code> is obtained with Newton-Raphson iteration applied to the classical Kepler
+        equation <code>M = E - e sin(E)</code>.
+      </p>
+      <div class="eq">
+        E<sub>n+1</sub> = E<sub>n</sub> + dE<br>
+        dE = (M - (E - e sin(E))) / (1 - e cos(E))
+      </div>
+      <p>
+        The implementation caps the loop at 50 iterations and exits early when <code>|dE| &lt; 1e-12</code>.
+      </p>
+
+      <h3>4.4 True Anomaly</h3>
+      <div class="eq">
+        &nu; = 2 atan2(sqrt(1 + e) sin(E/2), sqrt(1 - e) cos(E/2))
+      </div>
+
+      <h3>4.5 Orbital-Plane Radius, Position, and Velocity</h3>
+      <p>
+        The state-vector builder computes the heliocentric radius in astronomical units and the orbital-plane position
+        and velocity before rotating them into the ecliptic frame.
+      </p>
+      <div class="eq">
+        r = a (1 - e<sup>2</sup>) / (1 + e cos(&nu;))
+      </div>
+      <div class="eq-grid">
+        <div class="eq">
+          <strong>Orbital-plane position</strong><br>
+          x<sub>o</sub> = r cos(&nu;)<br>
+          y<sub>o</sub> = r sin(&nu;)
+        </div>
+        <div class="eq">
+          <strong>Specific angular momentum path</strong><br>
+          p = a AUInMeters (1 - e<sup>2</sup>)<br>
+          h = sqrt(&mu; p)
+        </div>
+      </div>
+
+      <div class="eq-grid">
+        <div class="eq">
+          <strong>Orbital-plane velocity components</strong><br>
+          v<sub>x,o</sub> = -(&mu; / h) sin(&nu;)<br>
+          v<sub>y,o</sub> = (&mu; / h) (e + cos(&nu;))
+        </div>
+        <div class="eq">
+          <strong>Unit conversion</strong><br>
+          v<sub>km/s</sub> = v<sub>m/s</sub> / 1000
+        </div>
+      </div>
+
+      <h3>4.6 Rotation into Ecliptic Coordinates</h3>
+      <p>
+        The code constructs the <code>P</code> and <code>Q</code> column vectors for the standard orbital-plane-to-ecliptic
+        rotation parameterized by <code>&omega;</code>, <code>&Omega;</code>, and <code>i</code>.
+      </p>
+      <div class="eq">
+        P<sub>x</sub> = cos(&omega;) cos(&Omega;) - sin(&omega;) sin(&Omega;) cos(i)<br>
+        P<sub>y</sub> = cos(&omega;) sin(&Omega;) + sin(&omega;) cos(&Omega;) cos(i)<br>
+        P<sub>z</sub> = sin(&omega;) sin(i)
+      </div>
+      <div class="eq">
+        Q<sub>x</sub> = -sin(&omega;) cos(&Omega;) - cos(&omega;) sin(&Omega;) cos(i)<br>
+        Q<sub>y</sub> = -sin(&omega;) sin(&Omega;) + cos(&omega;) cos(&Omega;) cos(i)<br>
+        Q<sub>z</sub> = cos(&omega;) sin(i)
+      </div>
+      <div class="eq">
+        pos = x<sub>o</sub> P + y<sub>o</sub> Q<br>
+        vel = v<sub>x,o</sub> P + v<sub>y,o</sub> Q
+      </div>
+
+      <h3>4.7 Whole-System Drift</h3>
+      <p>
+        After the heliocentric velocity is constructed, the plugin adds a common drift vector to all bodies. This is
+        not an orbital-mechanics correction. It is a deliberate visual framing decision so the whole system traces a
+        spiral-like path in world space when viewed in the right camera mode.
+      </p>
+      <div class="eq">
+        v<sub>final</sub> = v<sub>orbital</sub> + v<sub>drift</sub>
+      </div>
+    </section>
+
+    <section>
+      <h2>5. Asteroid Cloud Formulas</h2>
+      <p>
+        Asteroids are not loaded as full perturbed ephemerides. They are generated from near-Earth-asteroid records
+        with a deliberately simplified Source-style path: size from absolute magnitude, mass from spherical volume and
+        rocky density, and initial motion from circularized solar orbit assumptions at a seeded phase.
+      </p>
+      <p class="source">
+        Governing implementation: <code>loadNEAAsteroidStates</code> in <code>solar_system.go</code>
+      </p>
+
+      <h3>5.1 Diameter and Radius from Absolute Magnitude</h3>
+      <div class="eq">
+        diameter<sub>km</sub> = 10<sup>3.123 - H / 5</sup><br>
+        radius<sub>km</sub> = diameter<sub>km</sub> / 2
+      </div>
+
+      <h3>5.2 Mass from Volume and Density</h3>
+      <div class="eq">
+        mass = (4 / 3) &pi; (radius<sub>m</sub>)<sup>3</sup> &rho;<br>
+        with &rho; = 2500 kg/m<sup>3</sup>
+      </div>
+
+      <h3>5.3 Initial Orbital Estimate</h3>
+      <p>
+        The asteroid seed uses the entry perihelion distance as the working orbital radius, enforces zero eccentricity,
+        and assigns a deterministic phase using a hash-derived fraction of <code>2&pi;</code>. The body period is then
+        estimated with the circular-orbit scaling law.
+      </p>
+      <div class="eq">
+        phase = hash(name) * 2&pi;<br>
+        period<sub>days</sub> = 365.25 sqrt(r<sub>AU</sub><sup>3</sup>)
+      </div>
+
+      <div class="warning">
+        This is intentionally lighter than a full small-body propagator. The asteroid cloud is mathematically coherent,
+        but it is simplified for rendering and interaction cost rather than for long-horizon ephemeris fidelity.
+      </div>
+    </section>
+
+    <section>
+      <h2>6. Body-State Conversion, Force Law, and Integrator</h2>
+      <p>
+        Once the initial heliocentric states are assembled, the runtime simulation advances them in orbit game-units
+        using Newtonian pairwise gravity and a symplectic-Euler-like momentum step.
+      </p>
+      <p class="source">
+        Governing implementation: <code>objects.go</code>, <code>physics.go</code>, and <code>simulation.go</code>
+      </p>
+
+      <h3>6.1 Input-State Conversion</h3>
+      <div class="eq-grid">
+        <div class="eq">
+          <strong>Position</strong><br>
+          x<sub>GU</sub> = x<sub>AU</sub> * GameUnitsPerAU
+        </div>
+        <div class="eq">
+          <strong>Velocity</strong><br>
+          v<sub>GU/s</sub> = v<sub>km/s</sub> * 1000 * BaseDistance
+        </div>
+      </div>
+      <div class="eq">
+        p = m v
+      </div>
+
+      <h3>6.2 Newtonian Force in Orbit-Game Units</h3>
+      <p>
+        The runtime force law starts in SI Newtons and then divides by the distance conversion so the stored force has
+        units of kg * GU / s<sup>2</sup>.
+      </p>
+      <div class="eq">
+        F<sub>N</sub> = G m<sub>1</sub> m<sub>2</sub> / r<sub>m</sub><sup>2</sup>
+      </div>
+      <div class="eq">
+        r<sub>m</sub> = r<sub>GU</sub> * UnitConversion<br>
+        F<sub>GU</sub> = F<sub>N</sub> / UnitConversion
+      </div>
+      <div class="eq">
+        F<sub>vector</sub> = F<sub>GU</sub> * (r / |r|)
+      </div>
+
+      <p>
+        Primary bodies interact with one another pairwise. Asteroid-cloud bodies are then forced only by the Sun, which
+        is a deliberate cost-saving and aesthetic simplification.
+      </p>
+
+      <h3>6.3 Symplectic Momentum Integrator</h3>
+      <p>
+        The implementation and its mirrored Python reference both document the same three-line update rule:
+      </p>
+      <div class="eq">
+        p<sub>new</sub> = p + F dt timeScale<br>
+        v<sub>new</sub> = p<sub>new</sub> / m<br>
+        x<sub>new</sub> = x + v<sub>new</sub> dt timeScale
+      </div>
+
+      <p>
+        This is described in comments as "leapfrog / symplectic Euler" and it has the key structural feature that
+        momentum is updated before the position update uses the new velocity.
+      </p>
+
+      <h3>6.4 Substep Strategy</h3>
+      <p>
+        To avoid extremely large integration jumps under high time-scale settings, the simulation slices one frame into
+        substeps when the simulated elapsed time exceeds one hour.
+      </p>
+      <div class="eq">
+        rawStep = |dt * timeScale|<br>
+        subCount = ceil(rawStep / 3600) capped at 24<br>
+        subDt = dt / subCount
+      </div>
+    </section>
+
+    <section>
+      <h2>7. Classical Mechanics Helpers and Color Mapping</h2>
+      <p>
+        The plugin mirrors a compact classical-mechanics module from the Python port. These helpers are not responsible
+        for the actual N-body advance, but they drive diagnostics and orbit-color presentation.
+      </p>
+
+      <h3>7.1 Orbital Period</h3>
+      <div class="eq">
+        T = 2 &pi; sqrt(r<sup>3</sup> / (G M))
+      </div>
+      <p>
+        The plugin first converts the orbit-frame distance to meters, then evaluates the above expression relative to
+        the Sun. This is used as a period estimate for the currently simulated heliocentric radius.
+      </p>
+
+      <h3>7.2 Circular-Orbit Speed</h3>
+      <div class="eq">
+        v = sqrt(G (M<sub>central</sub> + M<sub>body</sub>) / r)
+      </div>
+
+      <h3>7.3 Period-to-Hue Mapping</h3>
+      <div class="eq">
+        t = clamp(periodDays / (10 * 365), 0, 1)<br>
+        hue = 240 (1 - t)
+      </div>
+
+      <p>
+        The hue is then converted to RGB by the piecewise sector-based HSV conversion in <code>HsvToRgb</code>. This is
+        purely visual math, but it is still part of the implemented formula stack.
+      </p>
+    </section>
+
+    <section class="section-break">
+      <h2>8. Script-Side Geometry and Predicted Body Motion</h2>
+      <p>
+        <code>SolarSystem.as</code> builds several local geometric helpers on top of the simulated body positions.
+        These functions are used throughout Falcon guidance and camera placement.
+      </p>
+
+      <h3>8.1 Reference Geometry</h3>
+      <div class="eq">
+        OrbitXZ(angle, radius, height) = (radius cos(angle), height, radius sin(angle))
+      </div>
+
+      <h3>8.2 Body Velocity from Finite Difference</h3>
+      <div class="eq">
+        v<sub>body</sub> = (x(t) - x(t - &Delta;t)) / &Delta;t
+      </div>
+
+      <p>
+        Script-side body velocity is not queried from the Go integrator directly. Instead, it is reconstructed from
+        consecutive body positions using the current simulated time advance.
+      </p>
+
+      <h3>8.3 Predicted Body Position by Angular Rotation</h3>
+      <p>
+        Future body motion is approximated by rotating the current heliocentric relative vector around the engine's
+        vertical axis using the stored orbital period, not by propagating the full N-body state forward.
+      </p>
+      <div class="eq">
+        advance = 2 &pi; daysAhead / periodDays
+      </div>
+      <div class="eq">
+        angularSign = r<sub>x</sub> v<sub>z</sub> - r<sub>z</sub> v<sub>x</sub>
+      </div>
+      <div class="eq">
+        r<sub>pred</sub> = RotateAroundY(r, advance * sign)
+      </div>
+
+      <div class="warning">
+        This prediction is explicitly a circularized angular extrapolation. It ignores changing radius, perturbations,
+        and any future evolution of the N-body state. The transfer planner therefore uses an approximation of the target
+        body's future heliocentric location, not a numerically propagated intercept solution.
+      </div>
+
+      <h3>8.4 Local Body Basis</h3>
+      <div class="eq-grid">
+        <div class="eq">
+          <strong>Up</strong><br>
+          up = normalize(bodyPos - sunPos)
+        </div>
+        <div class="eq">
+          <strong>Forward</strong><br>
+          tangential = v - up (v dot up)<br>
+          forward = normalize(tangential)
+        </div>
+        <div class="eq">
+          <strong>Right</strong><br>
+          right = normalize(forward cross up)
+        </div>
+        <div class="eq">
+          <strong>Rotate around Y</strong><br>
+          x' = x cos(a) - z sin(a)<br>
+          z' = x sin(a) + z cos(a)
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>9. Falcon Local-Frame Ascent Math</h2>
+      <p>
+        The Falcon booster uses two regimes. First it ascends in a local ground-relative frame measured in the Falcon's
+        own 5-meters-per-unit scale. Later it switches to orbit-world coordinates for the interplanetary route.
+      </p>
+
+      <h3>9.1 Booster Mass</h3>
+      <div class="eq">
+        m = m<sub>dry</sub> + max(m<sub>prop</sub> - m<sub>fuelSpent</sub>, 0)
+      </div>
+
+      <h3>9.2 Local Gravity and Drag</h3>
+      <div class="eq-grid">
+        <div class="eq">
+          <strong>Local gravity</strong><br>
+          a<sub>g</sub> = (0, -g<sub>0</sub> * F9_GU_PER_METER, 0)
+        </div>
+        <div class="eq">
+          <strong>Implemented drag</strong><br>
+          a<sub>d</sub> = -k |v| v<br>
+          with k = 0.0025
+        </div>
+      </div>
+
+      <p>
+        The drag term is quadratic in speed because the velocity vector is multiplied by its magnitude.
+      </p>
+
+      <h3>9.3 Maximum Thrust Acceleration</h3>
+      <div class="eq">
+        a<sub>max</sub> = (T<sub>max</sub> / m) * F9_GU_PER_METER
+      </div>
+
+      <h3>9.4 Injection Direction and Tower Alignment</h3>
+      <p>
+        The ascent controller tries to align the local horizontal motion with the heliocentric prograde direction of the
+        launch planet. Lateral error is simply the horizontal component of the injection vector.
+      </p>
+      <div class="eq-grid">
+        <div class="eq">
+          <strong>Lateral error</strong><br>
+          e<sub>lat</sub> = (dir<sub>x</sub>, 0, dir<sub>z</sub>)
+        </div>
+        <div class="eq">
+          <strong>Lateral velocity feedback</strong><br>
+          v<sub>lat,fb</sub> = (-v<sub>x</sub>, 0, -v<sub>z</sub>)
+        </div>
+      </div>
+      <div class="eq">
+        align = clamp(1 - |e<sub>lat</sub>| / 12, 0, 1) * 100
+      </div>
+
+      <h3>9.5 Grid Fin Commands</h3>
+      <div class="eq">
+        finCmdX = clamp(0.10 e<sub>x</sub> + 0.30 v<sub>x,fb</sub>, -1, 1)<br>
+        finCmdZ = clamp(0.10 e<sub>z</sub> + 0.30 v<sub>z,fb</sub>, -1, 1)
+      </div>
+      <div class="eq">
+        yaw<sub>gridfin</sub> = finCmdX * 30 deg<br>
+        pitch<sub>gridfin</sub> = -finCmdZ * 30 deg
+      </div>
+
+      <h3>9.6 Gravity Turn</h3>
+      <p>
+        The ascent thrust vector starts nearly vertical and progressively leans into the heliocentric injection
+        direction as altitude increases.
+      </p>
+      <div class="eq">
+        gravityTurn = clamp(altitudeMeters / 1800, 0, 1)
+      </div>
+      <div class="eq">
+        thrustDir = normalize(
+        (dir<sub>x</sub> (0.15 + 0.95 gravityTurn),
+        1 - 0.72 gravityTurn,
+        dir<sub>z</sub> (0.15 + 0.95 gravityTurn)))
+      </div>
+
+      <h3>9.7 Mass Flow</h3>
+      <div class="eq">
+        m-dot = throttle * T<sub>max</sub> / (Isp g<sub>0</sub>)
+      </div>
+
+      <h3>9.8 Local State Update</h3>
+      <div class="eq">
+        a = a<sub>g</sub> + a<sub>d</sub> + throttle * a<sub>max</sub> thrustDir<br>
+        v = v + a dt<br>
+        x = x + v dt
+      </div>
+
+      <p>
+        The ascent phase exits when either the phase timer exceeds 18 seconds or the local altitude exceeds 2200 meters.
+      </p>
+    </section>
+
+    <section class="section-break">
+      <h2>10. Falcon Transfer Planning</h2>
+      <p>
+        The interplanetary transfer planner is Hohmann-like in its scalar formulas but not a full Lambert solve. It uses
+        the current heliocentric start vector, a circularized prediction of the target's future position, and a derived
+        elliptical radius law to generate the cruise path.
+      </p>
+
+      <h3>10.1 Transfer Time</h3>
+      <p>
+        The nominal transfer time is computed from the semi-major axis in physical meters.
+      </p>
+      <div class="eq">
+        a = (r<sub>1</sub> + r<sub>2</sub>) / 2
+      </div>
+      <div class="eq">
+        TOF = &pi; sqrt(a<sup>3</sup> / &mu;<sub>sun</sub>)
+      </div>
+
+      <h3>10.2 Transfer Speeds and Injection Delta-v</h3>
+      <div class="eq-grid">
+        <div class="eq">
+          <strong>Circular speed at departure</strong><br>
+          v<sub>circ</sub> = sqrt(&mu; / r<sub>1</sub>)
+        </div>
+        <div class="eq">
+          <strong>Transfer speed at departure</strong><br>
+          v<sub>trans</sub> = sqrt(&mu; (2 / r<sub>1</sub> - 1 / a))
+        </div>
+      </div>
+      <div class="eq">
+        &Delta;v<sub>1</sub> = max(v<sub>trans</sub> - v<sub>current</sub>, 0)
+      </div>
+
+      <p>
+        If the script-side estimate of current heliocentric departure speed is non-positive, the code falls back to the
+        circular speed estimate. The burn direction is simply heliocentric prograde.
+      </p>
+
+      <h3>10.3 Stored Transfer Shape</h3>
+      <div class="eq-grid">
+        <div class="eq">
+          <strong>Semi-major axis</strong><br>
+          a = 0.5 (r<sub>1</sub> + r<sub>2</sub>)
+        </div>
+        <div class="eq">
+          <strong>Eccentricity</strong><br>
+          e = (r<sub>2</sub> - r<sub>1</sub>) / (r<sub>1</sub> + r<sub>2</sub>)
+        </div>
+      </div>
+
+      <h3>10.4 Logged Burn Acceleration</h3>
+      <p>
+        The script stores a nominal two-hour burn duration and converts the scalar injection delta-v into a constant
+        acceleration vector for telemetry purposes.
+      </p>
+      <div class="eq">
+        burnTime = 7200 s<br>
+        a<sub>burn,logged</sub> = dir<sub>burn</sub> * (&Delta;v<sub>1</sub> / burnTime)
+      </div>
+
+      <div class="warning">
+        This burn acceleration is not what actually propagates the transfer trajectory. During cruise, the code sets the
+        Falcon world position and velocity directly from the analytic transfer curve. The burn vector is accumulated into
+        displayed total delta-v and logged into the profile, but cruise state itself is not integrated from thrust.
+      </div>
+
+      <h3>10.5 Lead Angle</h3>
+      <div class="eq">
+        leadAngle = 360 * daysAhead / targetPeriodDays mod 360
+      </div>
+    </section>
+
+    <section>
+      <h2>11. Transfer Curve Interpolation and Cruise Kinematics</h2>
+      <p>
+        Cruise is driven by a parameterized trajectory indexed by normalized transfer progress <code>p</code>. The curve
+        uses the classic ellipse radius formula, but the target angle is taken from the predicted target position rather
+        than from a Lambert boundary-value solution.
+      </p>
+
+      <h3>11.1 Transfer Progress</h3>
+      <div class="eq">
+        p = clamp(elapsedDays / transferDays, 0, 1)
+      </div>
+
+      <h3>11.2 Angular Sweep</h3>
+      <p>
+        The code computes start and target heliocentric angles in the script's horizontal plane and then wraps the sweep
+        direction according to the sign of the prograde cross-product.
+      </p>
+      <div class="eq">
+        angle<sub>start</sub> = atan2(r<sub>start,z</sub>, r<sub>start,x</sub>)<br>
+        angle<sub>target</sub> = atan2(r<sub>target,z</sub>, r<sub>target,x</sub>)
+      </div>
+
+      <div class="eq">
+        progradeSign = r<sub>start,x</sub> t<sub>z</sub> - r<sub>start,z</sub> t<sub>x</sub>
+      </div>
+
+      <h3>11.3 Radius Law Along the Transfer</h3>
+      <div class="eq">
+        &nu; = &pi; p
+      </div>
+      <div class="eq">
+        r(p) = a (1 - e<sup>2</sup>) / (1 + e cos(&nu;))
+      </div>
+
+      <p>
+        The Y component is not solved orbitally. It is linearly interpolated between start and target relative heights.
+      </p>
+      <div class="eq">
+        y(p) = y<sub>start</sub> + (y<sub>target</sub> - y<sub>start</sub>) p
+      </div>
+
+      <h3>11.4 Parametric Cruise Position</h3>
+      <div class="eq">
+        relPos(p) = (cos(angle(p)) r(p), y(p), sin(angle(p)) r(p))
+      </div>
+
+      <h3>11.5 Cruise Velocity from Finite Difference</h3>
+      <p>
+        Instead of differentiating the transfer analytically, the code samples nearby progress points and divides by the
+        corresponding physical time interval.
+      </p>
+      <div class="eq">
+        relVel(p) approximately [relPos(p + s) - relPos(p - s)] / [2 s transferDays 86400]
+      </div>
+
+      <h3>11.6 Actual Cruise State Update</h3>
+      <div class="eq">
+        worldPos = sunPos + relPos(p)<br>
+        worldVel = sunVel + relVel(p)
+      </div>
+
+      <p>
+        That pair of assignments is the real cruise propagator in the current implementation.
+      </p>
+
+      <h3>11.7 Arc Length Estimate for HUD</h3>
+      <p>
+        The displayed traveled and remaining transfer distance uses the Ramanujan perimeter approximation for an ellipse,
+        then halves it to obtain the nominal transfer arc.
+      </p>
+      <div class="eq">
+        b = a sqrt(1 - e<sup>2</sup>)
+      </div>
+      <div class="eq">
+        perimeter approximately &pi; [3(a + b) - sqrt((3a + b)(a + 3b))]
+      </div>
+      <div class="eq">
+        transferArc approximately 0.5 * perimeter
+      </div>
+      <div class="eq">
+        traveled = transferArc * p<br>
+        remaining = max(transferArc - traveled, 0)
+      </div>
+    </section>
+
+    <section>
+      <h2>12. Mars Approach Targeting and Velocity Capture</h2>
+      <p>
+        The script contains a complete world-frame approach and landing controller relative to the target planet. Even
+        though the current sampled Falcon route terminates directly in <code>ARRIVED</code>, the approach math is fully
+        implemented and deserves separate treatment.
+      </p>
+
+      <h3>12.1 Mars Pad and Capture Geometry</h3>
+      <p>
+        The target pad is placed above the planet along the target body's current outward radial direction. The effective
+        radius includes the physical body radius plus half the booster height and a small clearance offset.
+      </p>
+      <div class="eq">
+        pad = marsPos + up<sub>body</sub> [R<sub>mars</sub> + clearance]
+      </div>
+
+      <h3>12.2 Entry-Up to Pad-Up Blend</h3>
+      <p>
+        The approach target is not always directly above the pad. It blends between the entry-side up vector captured at
+        transfer handoff and the pad's own up vector as altitude falls.
+      </p>
+      <div class="eq">
+        blend = clamp((45000 - altitudeMeters) / 33000, 0, 1)
+      </div>
+      <div class="eq">
+        targetUp = normalize(entryUp (1 - blend) + padUp blend)
+      </div>
+      <div class="eq">
+        approachTarget = marsPos + targetUp [surfaceRadius + 8000 m]
+      </div>
+
+      <h3>12.3 Velocity Capture at Approach Handoff</h3>
+      <p>
+        On transfer-to-approach capture, the script limits lateral and vertical relative velocities so the landing
+        controller starts from bounded values.
+      </p>
+      <div class="eq">
+        v<sub>vertical</sub> = clamp(v dot up, -90 m/s, 60 m/s)
+      </div>
+      <div class="eq">
+        v<sub>lateral</sub> = clampLength(v - up (v dot up), 450 m/s)
+      </div>
+      <div class="eq">
+        v<sub>world,new</sub> = v<sub>Mars</sub> + v<sub>lateral</sub> + up v<sub>vertical</sub>
+      </div>
+    </section>
+
+    <section class="section-break">
+      <h2>13. World-Frame Gravity and Powered Descent Controller</h2>
+      <p>
+        The Mars guidance loop is a relative-motion controller that uses Sun and Mars gravity, decomposes relative motion
+        into lateral and vertical components, and applies a PD-style acceleration command with thrust saturation.
+      </p>
+
+      <h3>13.1 Point-Mass Gravity in Orbit Game-Units</h3>
+      <div class="eq">
+        delta = attractorPos - pos<br>
+        r<sup>2</sup> = delta dot delta<br>
+        invR = 1 / sqrt(r<sup>2</sup>)<br>
+        a<sub>g</sub> = delta * (&mu; invR<sup>3</sup>)
+      </div>
+
+      <p>
+        This is the standard <code>&mu; r / |r|^3</code> acceleration form, evaluated separately for the rocket relative to
+        the Sun, Mars relative to the Sun, and the rocket relative to Mars.
+      </p>
+
+      <h3>13.2 Relative Motion Decomposition</h3>
+      <div class="eq">
+        relPos = rocketPos - targetPos<br>
+        relVel = rocketVel - targetPlanetVel
+      </div>
+      <div class="eq">
+        altitude = relPos dot up<br>
+        lateralPos = relPos - up altitude
+      </div>
+      <div class="eq">
+        v<sub>vertical</sub> = relVel dot up<br>
+        v<sub>lateral</sub> = relVel - up v<sub>vertical</sub>
+      </div>
+
+      <h3>13.3 Controller Gains</h3>
+      <p>
+        The controller uses one gain set for the broader Mars approach and a stronger gain set for the landing phase.
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Phase</th>
+            <th>Lateral Kp</th>
+            <th>Lateral Kd</th>
+            <th>Vertical Kp</th>
+            <th>Vertical Kd</th>
+            <th>Thrust Cap</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mars approach</td>
+            <td>0.12</td>
+            <td>0.42</td>
+            <td>0.22</td>
+            <td>0.55</td>
+            <td>0.75 * maxWorldAccel</td>
+          </tr>
+          <tr>
+            <td>Landing</td>
+            <td>0.22</td>
+            <td>0.60</td>
+            <td>0.45</td>
+            <td>0.95</td>
+            <td>maxWorldAccel</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>13.4 Desired Relative Acceleration</h3>
+      <div class="eq">
+        a<sub>desired</sub> = -K<sub>p,lat</sub> lateralPos - K<sub>d,lat</sub> lateralVel
+      </div>
+      <div class="eq">
+        altitudeError = altitude - targetAltitude
+      </div>
+      <div class="eq">
+        a<sub>desired</sub> = a<sub>desired</sub> + up (-K<sub>p,vert</sub> altitudeError - K<sub>d,vert</sub> v<sub>vertical</sub>)
+      </div>
+
+      <h3>13.5 Relative Gravity Compensation</h3>
+      <div class="eq">
+        a<sub>relGravity</sub> = (a<sub>sun on rocket</sub> - a<sub>sun on Mars</sub>) + a<sub>Mars on rocket</sub>
+      </div>
+
+      <div class="eq">
+        a<sub>cmd</sub> = clampLength(a<sub>desired</sub> - a<sub>relGravity</sub>, a<sub>thrust,max</sub>)
+      </div>
+
+      <div class="eq">
+        a<sub>world,total</sub> = a<sub>sun on rocket</sub> + a<sub>Mars on rocket</sub> + a<sub>cmd</sub>
+      </div>
+
+      <p>
+        This is the mathematically central landing equation in the script. It makes the controller operate in relative
+        coordinates while still respecting the world-frame gravitational field.
+      </p>
+
+      <h3>13.6 World State Update</h3>
+      <div class="eq">
+        v = v + a dt<br>
+        x = x + v dt
+      </div>
+
+      <h3>13.7 Surface Clamp</h3>
+      <p>
+        If the propagated state passes below the pad plane, the script projects the position back onto the surface and
+        removes any inward component of relative velocity.
+      </p>
+      <div class="eq">
+        if altitudePost &lt; 0, then x = pad + (relPost - up altitudePost)
+      </div>
+      <div class="eq">
+        inward = (v - v<sub>Mars</sub>) dot up<br>
+        if inward &lt; 0, then v = v - up inward
+      </div>
+
+      <h3>13.8 Phase Transition Thresholds</h3>
+      <div class="eq">
+        approach to landing if altitude &lt;= 12000 m and lateral error &lt;= 5000 m
+      </div>
+      <div class="eq">
+        landing to arrived if altitude &lt;= 25 m and |v<sub>vertical</sub>| &lt;= 2 m/s and lateral speed &lt;= 1.2 m/s
+      </div>
+    </section>
+
+    <section>
+      <h2>14. Telemetry, Logged Observables, and Profile-Derived Math</h2>
+      <p>
+        The Falcon profile logger computes several derived observables from the simulated state. These formulas matter
+        because the profile is the public-facing record of how the code interprets the flight.
+      </p>
+
+      <h3>14.1 Heading and Pitch</h3>
+      <div class="eq">
+        speed<sub>horizontal</sub> = sqrt(v<sub>x</sub><sup>2</sup> + v<sub>z</sub><sup>2</sup>)
+      </div>
+      <div class="eq">
+        heading = normalizeDegrees(atan2(v<sub>x</sub>, v<sub>z</sub>) * 180 / &pi;)
+      </div>
+      <div class="eq">
+        pitch = atan2(v<sub>y</sub>, speed<sub>horizontal</sub>) * 180 / &pi;
+      </div>
+
+      <h3>14.2 Heliocentric Longitude and Latitude</h3>
+      <div class="eq">
+        lon = normalizeDegrees(atan2(r<sub>z</sub>, r<sub>x</sub>) * 180 / &pi;)
+      </div>
+      <div class="eq">
+        lat = atan2(r<sub>y</sub>, sqrt(r<sub>x</sub><sup>2</sup> + r<sub>z</sub><sup>2</sup>)) * 180 / &pi;
+      </div>
+
+      <h3>14.3 Range and Speed Conversions</h3>
+      <div class="eq">
+        originRangeAU = |worldPos - originPos| / 1000
+      </div>
+      <div class="eq">
+        speed<sub>m/s</sub> = orbitGuToMeters(|relVel|)
+      </div>
+      <div class="eq">
+        padRange<sub>km</sub> = orbitGuToMeters(|pad - worldPos|) / 1000
+      </div>
+
+      <h3>14.4 Display-Reported Delta-v</h3>
+      <p>
+        The script accumulates the magnitude of the commanded acceleration over time and labels the resulting scalar as
+        delta-v. Mathematically that is correct if interpreted as the time integral of acceleration magnitude.
+      </p>
+      <div class="eq">
+        dv<sub>accum</sub> = integral |a<sub>cmd</sub>| dt
+      </div>
+
+      <h3>14.5 Phase-Dependent Sample Rate</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Phase</th>
+            <th>Sample Interval</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Ascent</td><td>0.25 s</td></tr>
+          <tr><td>Transfer</td><td>1800 s</td></tr>
+          <tr><td>Target approach</td><td>60 s</td></tr>
+          <tr><td>Target landing</td><td>2 s</td></tr>
+          <tr><td>Arrived</td><td>0 s</td></tr>
+        </tbody>
+      </table>
+
+      <div class="note">
+        The scanned Falcon profile confirmed the presence of these telemetry channels and their phase-driven sampling
+        behavior. No raw profile rows are reproduced here.
+      </div>
+    </section>
+
+    <section class="section-break">
+      <h2>15. Secondary Visualization Math</h2>
+      <p>
+        The Space sandbox also contains mathematically nontrivial display logic. It is not propulsion or orbital
+        dynamics, but it still shapes how the simulation is interpreted visually.
+      </p>
+
+      <h3>15.1 Body Visual Scale</h3>
+      <div class="eq">
+        scale = clamp(0.6 log<sub>10</sub>(max(radiusKm, 1)), 0.3, 5.0)
+      </div>
+
+      <h3>15.2 Sun Glow Scaling</h3>
+      <div class="eq">
+        glowScale = sunBaseScale * (1 + 0.5 * sunIntensity)
+      </div>
+
+      <h3>15.3 Falcon Display Smoothing</h3>
+      <div class="eq">
+        blend = clamp(14 dt, 0, 1)
+      </div>
+      <div class="eq">
+        displayPos = displayPos + (truePos - displayPos) blend
+      </div>
+      <div class="eq">
+        displayTilt = displayTilt + (targetTilt - displayTilt) blend
+      </div>
+
+      <h3>15.4 Tilt from Burn Vector or Grid Fins</h3>
+      <div class="eq">
+        tiltX = clamp(-burn<sub>z</sub> * 0.7, -25, 25) when burn exists, otherwise clamp(gridfinPitch * 0.18, -18, 18)
+      </div>
+      <div class="eq">
+        tiltZ = clamp(burn<sub>x</sub> * 0.7, -25, 25) when burn exists, otherwise clamp(-gridfinYaw * 0.18, -18, 18)
+      </div>
+    </section>
+
+    <section>
+      <h2>16. Camera and Reference-View Math</h2>
+      <p>
+        The orbit camera uses standard spherical-coordinate placement with a reference-body auto-orientation mode.
+      </p>
+
+      <h3>16.1 Reference-Body Framing</h3>
+      <div class="eq">
+        distToRef = sqrt(dx<sup>2</sup> + dy<sup>2</sup> + dz<sup>2</sup>)
+      </div>
+      <div class="eq">
+        desiredOrbitDistance = max(1.5 distToRef userZoom, 50)
+      </div>
+      <div class="eq">
+        orbitDistance = orbitDistance + 0.05 (desiredOrbitDistance - orbitDistance)
+      </div>
+
+      <h3>16.2 Auto-Yaw and Pitch</h3>
+      <div class="eq">
+        targetYaw = atan2(dx, dz)
+      </div>
+      <div class="eq">
+        orbitYaw = orbitYaw + 0.08 wrapPi(targetYaw - orbitYaw)
+      </div>
+      <div class="eq">
+        orbitPitch = orbitPitch + 0.08 (0.35 - orbitPitch)
+      </div>
+
+      <h3>16.3 Camera Position from Spherical Coordinates</h3>
+      <div class="eq">
+        c<sub>p</sub> = cos(pitch), s<sub>p</sub> = sin(pitch), c<sub>y</sub> = cos(yaw), s<sub>y</sub> = sin(yaw)
+      </div>
+      <div class="eq">
+        cam<sub>x</sub> = target<sub>x</sub> + d c<sub>p</sub> s<sub>y</sub><br>
+        cam<sub>y</sub> = target<sub>y</sub> + d s<sub>p</sub><br>
+        cam<sub>z</sub> = target<sub>z</sub> + d c<sub>p</sub> c<sub>y</sub>
+      </div>
+
+      <p>
+        This is a conventional spherical-orbit camera, but with auto-yaw chosen to keep the current reference body in a
+        visually readable behind-the-focus spiral composition.
+      </p>
+    </section>
+
+    <section>
+      <h2>17. What the Space Stack Is, Mathematically</h2>
+      <p>
+        The cleanest technical summary is this:
+      </p>
+      <ul>
+        <li>The planetary background is a genuine Newtonian N-body simulation in scaled heliocentric coordinates.</li>
+        <li>The initial Solar System is built from classical orbital elements via Kepler solving and state-vector rotation.</li>
+        <li>The asteroid cloud uses intentionally simplified mass and orbit synthesis to stay visually cheap.</li>
+        <li>The Falcon ascent is a local explicit-Euler rigid-body proxy with thrust, constant gravity, quadratic drag, and propellant depletion.</li>
+        <li>The interplanetary transfer is an analytic Hohmann-like parametric arc driven by approximate future target position, not by a Lambert solve and not by integrated thrust.</li>
+        <li>The approach and landing code implements a bounded PD controller in relative coordinates with explicit gravity compensation.</li>
+        <li>The telemetry and camera layers derive heading, pitch, longitude, latitude, delta-v, glow, scale, and orbit framing through straightforward but carefully tuned geometry.</li>
+      </ul>
+
+      <div class="warning">
+        The most important mathematical caveat is that the Falcon cruise is currently a hybrid of planning math and
+        display math. The transfer planner computes classical orbital quantities, but the runtime cruise state is imposed
+        by parametric interpolation instead of being numerically propagated by rocket thrust or by a general two-point
+        orbital boundary solver.
+      </div>
+    </section>
+
+    <section>
+      <h2>18. Symbol Index</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Symbol</th>
+            <th>Meaning in This Codebase</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>a</td><td>Semi-major axis of the transfer ellipse or the current orbital element</td></tr>
+          <tr><td>b</td><td>Semi-minor axis used for Ramanujan ellipse-perimeter approximation</td></tr>
+          <tr><td>e</td><td>Eccentricity</td></tr>
+          <tr><td>E</td><td>Eccentric anomaly</td></tr>
+          <tr><td>M</td><td>Mean anomaly</td></tr>
+          <tr><td>&nu;</td><td>True anomaly or normalized transfer anomaly <code>&pi; p</code></td></tr>
+          <tr><td>&mu;</td><td>Standard gravitational parameter</td></tr>
+          <tr><td>&Omega;</td><td>Longitude of ascending node</td></tr>
+          <tr><td>&omega;</td><td>Argument of perihelion</td></tr>
+          <tr><td>&varpi;</td><td>Longitude of perihelion</td></tr>
+          <tr><td>r</td><td>Radius from the central body</td></tr>
+          <tr><td>p</td><td>Transfer progress in <code>[0, 1]</code> or semi-latus rectum where context requires</td></tr>
+          <tr><td>Kp, Kd</td><td>Proportional and derivative gains for the approach/landing controller</td></tr>
+          <tr><td>TOF</td><td>Transfer time of flight</td></tr>
+        </tbody>
+      </table>
+
+      <div class="footer-signoff">
+        Respectfully submitted,<br>
+        Lieutenant Lopez
+      </div>
+    </section>
+  </main>
+</body>
+</html>
